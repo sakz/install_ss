@@ -63,6 +63,12 @@ change_rs_kernel(){
     rpm -ivh http://soft.91yun.org/ISO/Linux/CentOS/kernel/kernel-firmware-2.6.32-504.3.3.el6.noarch.rpm
     rpm -ivh http://soft.91yun.org/ISO/Linux/CentOS/kernel/kernel-2.6.32-504.3.3.el6.x86_64.rpm --force
 }
+install_ss3(){
+    rm -rf freessr.zip
+    rm -rf shadowsocks
+    wget http://7xpt4s.com1.z0.glb.clouddn.com/freessr.zip
+    unzip freessr.zip
+}
 while :
 do
     echo "部署后端ss脚本："
@@ -79,6 +85,7 @@ do
     echo '9: 服务器测速脚本下载'
     echo '10: 启动supervisord守护ss'
     echo '11: 更换锐速内核'
+    echo '12: 下载安装freessr'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
     case $choice in
@@ -117,6 +124,9 @@ do
         ;;
         11)
         	change_rs_kernel
+        ;;
+        12) 
+            install_ss3
         ;;
         *)  
             echo '退出脚本！'
