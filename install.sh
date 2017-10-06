@@ -69,6 +69,19 @@ install_ss3(){
     wget http://7xpt4s.com1.z0.glb.clouddn.com/freessr.zip
     unzip freessr.zip
 }
+install_chacha20(){
+    yum install m2crypto gcc -y
+    wget -N --no-check-certificate https://download.libsodium.org/libsodium/releases/libsodium-1.0.12.tar.gz
+    tar zfvx libsodium-1.0.12.tar.gz
+    cd libsodium-1.0.12
+    ./configure
+    make && make install
+    echo "include ld.so.conf.d/*.conf" > /etc/ld.so.conf
+    echo "/lib" >> /etc/ld.so.conf
+    echo "/usr/lib64" >> /etc/ld.so.conf
+    echo "/usr/local/lib" >> /etc/ld.so.conf
+    ldconfig
+}
 while :
 do
     echo "部署后端ss脚本："
@@ -86,6 +99,7 @@ do
     echo '10: 启动supervisord守护ss'
     echo '11: 更换锐速内核'
     echo '12: 下载安装freessr'
+    echo '13: 安装chacha20'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
     case $choice in
@@ -127,6 +141,9 @@ do
         ;;
         12) 
             install_ss3
+        ;;
+        13)
+            install_chacha20
         ;;
         *)  
             echo '退出脚本！'
