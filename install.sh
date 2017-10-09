@@ -71,8 +71,7 @@ install_ss3(){
 }
 install_chacha20(){
     yum install m2crypto gcc -y
-    wget -N --no-check-certificate https://download.libsodium.org/libsodium/releases/libsodium-1.0.12.tar.gz
-    tar zfvx libsodium-1.0.12.tar.gz
+    wget -N --no-check-certificate https://github.com/jedisct1/libsodium/releases/download/1.0.12/libsodium-1.0.12.tar.gz
     cd libsodium-1.0.12
     ./configure
     make && make install
