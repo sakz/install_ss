@@ -63,7 +63,7 @@ change_rs_kernel(){
     # rpm -ivh http://soft.91yun.org/ISO/Linux/CentOS/kernel/kernel-firmware-2.6.32-504.3.3.el6.noarch.rpm
     # rpm -ivh http://soft.91yun.org/ISO/Linux/CentOS/kernel/kernel-2.6.32-504.3.3.el6.x86_64.rpm --force
     rpm -ivh ftp://mirror.switch.ch/pool/4/mirror/scientificlinux/6.4/x86_64/updates/security/kernel-firmware-2.6.32-504.3.3.el6.noarch.rpm
-    rpm -ivh http://ftp.riken.jp/Linux/scientific/6.4/x86_64/updates/security/kernel-2.6.32-504.3.3.el6.x86_64.rpm
+    rpm -ivh http://ftp.riken.jp/Linux/scientific/6.4/x86_64/updates/security/kernel-2.6.32-504.3.3.el6.x86_64.rpm --force
 
 }
 install_ss3(){
