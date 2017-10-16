@@ -85,6 +85,9 @@ install_chacha20(){
     echo "/usr/local/lib" >> /etc/ld.so.conf
     ldconfig
 }
+add_scholar_ipv6_hosts(){
+    sed -i '$a 2404:6800:4008:c06::be scholar.google.com\n2404:6800:4008:c06::be scholar.google.com.sg\n2404:6800:4008:c06::be scholar.google.com.hk\n2404:6800:4008:c06::be scholar.google.com.tw\n2401:3800:4001:10::101f scholar.google.cn' hosts
+}
 while :
 do
     echo "部署后端ss脚本："
@@ -103,6 +106,7 @@ do
     echo '11: 更换锐速内核'
     echo '12: 下载安装freessr'
     echo '13: 安装chacha20'
+    echo '14: 添加谷歌学术ipv6-hosts'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
     case $choice in
@@ -147,6 +151,9 @@ do
         ;;
         13)
             install_chacha20
+        ;;
+        14)
+            add_scholar_ipv6_hosts
         ;;
         *)  
             echo '退出脚本！'
