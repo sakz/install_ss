@@ -86,8 +86,8 @@ install_chacha20(){
     ldconfig
 }
 add_scholar_ipv6_hosts(){
-    sed -i '$a 2404:6800:4008:c06::be scholar.google.com\n2404:6800:4008:c06::be scholar.google.com.sg\n2404:6800:4008:c06::be scholar.google.com.hk\n2404:6800:4008:c06::be scholar.google.com.tw\n2401:3800:4001:10::101f scholar.google.cn' /etc/hosts
-}
+    sed -i '$a 2404:6800:4008:c06::be scholar.google.com\n2404:6800:4008:c06::be scholar.google.com.sg\n2404:6800:4008:c06::be scholar.google.com.hk\n2404:6800:4008:c06::be scholar.google.com.tw\n2404:6800:4008:c06::be scholar.googleusercontent.com\n2401:3800:4001:10::101f scholar.google.cn' /etc/hosts
+                            }
 while :
 do
     echo "部署后端ss脚本："
