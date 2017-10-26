@@ -26,9 +26,11 @@ install_vnstat_iftop(){
     chkconfig vnstat on
 }
 install_ss(){
-    yum install -y python-setuptools && easy_install pip
+    # yum install -y python-setuptools && easy_install pip
+    yum install -y python-setuptools
     yum install -y m2crypto git
     yum install -y unzip
+    yum install -y python-pip
     pip install cymysql
 }
 install_ss1(){
