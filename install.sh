@@ -89,7 +89,25 @@ install_chacha20(){
 }
 add_scholar_ipv6_hosts(){
     sed -i '$a 2404:6800:4008:c06::be scholar.google.com\n2404:6800:4008:c06::be scholar.google.com.sg\n2404:6800:4008:c06::be scholar.google.com.hk\n2404:6800:4008:c06::be scholar.google.com.tw\n2404:6800:4008:c06::be scholar.googleusercontent.com\n2401:3800:4001:10::101f scholar.google.cn' /etc/hosts
-                            }
+}
+install_ovz_bbr(){
+    yum install -y gcc g++
+    echo "开始安装glibc-2.15"
+    wget http://ftp.gnu.org/gnu/glibc/glibc-2.15.tar.gz  
+    wget http://ftp.gnu.org/gnu/glibc/glibc-ports-2.15.tar.gz  
+    tar -xvf  glibc-2.15.tar.gz  
+    tar -xvf  glibc-ports-2.15.tar.gz  
+    mv glibc-ports-2.15 glibc-2.15/ports  
+    mkdir glibc-build-2.15    
+    cd glibc-build-2.15  
+    ../glibc-2.15/configure  --prefix=/usr --disable-profile --enable-add-ons --with-headers=/usr/include --with-binutils=/usr/bin  
+    make && make install
+
+    echo "开始安装ovz_bbr"
+    wget https://raw.githubusercontent.com/kuoruan/shell-scripts/master/ovz-bbr/ovz-bbr-installer.sh
+    chmod +x ovz-bbr-installer.sh
+    ./ovz-bbr-installer.sh
+}
 while :
 do
     echo "部署后端ss脚本："
@@ -109,6 +127,7 @@ do
     echo '12: 下载安装freessr'
     echo '13: 安装chacha20'
     echo '14: 添加谷歌学术ipv6-hosts'
+    echo '15: 安装ovz_bbr'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
     case $choice in
@@ -156,6 +175,9 @@ do
         ;;
         14)
             add_scholar_ipv6_hosts
+        ;;
+        15)
+            install_ovz_bbr
         ;;
         *)  
             echo '退出脚本！'
