@@ -20,8 +20,9 @@ install_fs(){
 }
 install_vnstat_iftop(){
     yum install epel-release -y && yum install -y vnstat && yum install -y iftop
-    read -p "输入网卡：" network_card
-    vnstat -u -i $network_card
+    # read -p "输入网卡：" network_card
+    # vnstat -u -i $network_card
+    vnstat -u -i eth0
     service vnstat start
     chkconfig vnstat on
 }
