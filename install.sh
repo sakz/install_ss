@@ -109,6 +109,16 @@ install_ovz_bbr(){
     chmod +x ovz-bbr-installer.sh
     ./ovz-bbr-installer.sh
 }
+install_ssl(){
+    yum install -y epel-release
+    wget https://dl.eff.org/certbot-auto --no-check-certificate
+    chmod +x ./certbot-auto
+    read -p "输入邮箱：" email
+    read -p "输入域名：" domain
+    read -p "输入网站根目录的绝对路径：" webroot
+    ./certbot-auto certonly --email $email --agree-tos --no-eff-email --webroot -w $webroot -d $domain
+    echo "生成的证书在/etc/letsencrypt/live/"$domain
+}
 while :
 do
     echo "部署后端ss脚本："
@@ -129,6 +139,7 @@ do
     echo '13: 安装chacha20'
     echo '14: 添加谷歌学术ipv6-hosts'
     echo '15: 安装ovz_bbr'
+    echo '16: 安装ssl证书'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
     case $choice in
@@ -179,6 +190,9 @@ do
         ;;
         15)
             install_ovz_bbr
+        ;;
+        16)
+            install_ssl
         ;;
         *)  
             echo '退出脚本！'
