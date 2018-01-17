@@ -119,6 +119,9 @@ install_ssl(){
     ./certbot-auto certonly --email $email --agree-tos --no-eff-email --webroot -w $webroot -d $domain
     echo "生成的证书在/etc/letsencrypt/live/"$domain
 }
+install_iptables(){
+    wget -N --no-check-certificate https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/iptables-pf.sh && chmod +x iptables-pf.sh && bash iptables-pf.sh
+}
 while :
 do
     echo "部署后端ss脚本："
@@ -140,6 +143,7 @@ do
     echo '14: 添加谷歌学术ipv6-hosts'
     echo '15: 安装ovz_bbr'
     echo '16: 安装ssl证书'
+    echo '17: 安装iptables转发'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
     case $choice in
@@ -193,6 +197,9 @@ do
         ;;
         16)
             install_ssl
+        ;;
+        17)
+            install_iptables
         ;;
         *)  
             echo '退出脚本！'
