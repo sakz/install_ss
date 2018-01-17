@@ -122,6 +122,12 @@ install_ssl(){
 install_iptables(){
     wget -N --no-check-certificate https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/iptables-pf.sh && chmod +x iptables-pf.sh && bash iptables-pf.sh
 }
+install_ss3(){
+    rm -rf SS3.zip
+    rm -rf shadowsocks
+    wget http://7xpt4s.com1.z0.glb.clouddn.com/SS3.zip
+    unzip SS3.zip
+}
 while :
 do
     echo "部署后端ss脚本："
@@ -144,6 +150,7 @@ do
     echo '15: 安装ovz_bbr'
     echo '16: 安装ssl证书'
     echo '17: 安装iptables转发'
+    echo '18: 下载安装SS3'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
     case $choice in
@@ -200,6 +207,9 @@ do
         ;;
         17)
             install_iptables
+        ;;
+        18)
+            install_ss3
         ;;
         *)  
             echo '退出脚本！'
