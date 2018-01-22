@@ -216,6 +216,7 @@ do
         19)
             install_vnstat_iftop
             install_ss
+            add_scholar_ipv6_hosts
             change_rs_kernel
             ulimit
         ;;
