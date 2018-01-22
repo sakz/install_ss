@@ -1,9 +1,10 @@
 #!/bin/bash
 export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 ulimit(){
-    read -p "输入open files 数量（默认为131072）:" num
-    [ -z $num] && num='131072'
-    echo "* - nofile $num" >> /etc/security/limits.conf
+    # read -p "输入open files 数量（默认为131072）:" num
+    # [ -z $num] && num='131072'
+    # echo "* - nofile $num" >> /etc/security/limits.conf
+    echo "* - nofile 131072" >> /etc/security/limits.conf
     echo "修改/etc/security/limits.conf完成，准备重启"
     reboot
 }
@@ -151,6 +152,7 @@ do
     echo '16: 安装ssl证书'
     echo '17: 安装iptables转发'
     echo '18: 下载安装SS3'
+    echo '19: 初始化vps'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
     case $choice in
@@ -210,6 +212,12 @@ do
         ;;
         18)
             install_ss3
+        ;;
+        19)
+            install_vnstat_iftop
+            install_ss
+            change_rs_kernel
+            ulimit
         ;;
         *)  
             echo '退出脚本！'
