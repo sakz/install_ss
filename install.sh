@@ -33,7 +33,7 @@ install_ss(){
     yum install -y m2crypto git
     yum install -y unzip
     yum install -y python-pip
-    pip install cymysql
+    pip install cymysql==0.9.4
 }
 install_ss1(){
     rm -rf shadowsocks.zip
