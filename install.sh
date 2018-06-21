@@ -129,6 +129,9 @@ install_ss3(){
     wget http://7xpt4s.com1.z0.glb.clouddn.com/SS3.zip
     unzip SS3.zip
 }
+install_bbr(){
+    wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh && chmod +x bbr.sh && ./bbr.sh
+}
 while :
 do
     echo "部署后端ss脚本："
@@ -153,6 +156,7 @@ do
     echo '17: 安装iptables转发'
     echo '18: 下载安装SS3'
     echo '19: 初始化vps'
+    echo '20: 安装bbr'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
     case $choice in
@@ -219,6 +223,9 @@ do
             add_scholar_ipv6_hosts
             change_rs_kernel
             ulimit
+        ;;
+        20)
+            install_bbr
         ;;
         *)  
             echo '退出脚本！'
