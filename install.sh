@@ -1,7 +1,7 @@
 #!/bin/bash
 export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
-baseUrl = https://raw.githubusercontent.com/sakz/install_ss/master/
+baseUrl=https://raw.githubusercontent.com/sakz/install_ss/master/
 
 ulimit(){
     # read -p "输入open files 数量（默认为131072）:" num
