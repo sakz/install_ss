@@ -1,5 +1,8 @@
 #!/bin/bash
 export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+baseUrl = https://raw.githubusercontent.com/sakz/install_ss/master/
+
 ulimit(){
     # read -p "输入open files 数量（默认为131072）:" num
     # [ -z $num] && num='131072'
@@ -13,7 +16,7 @@ install_rs(){
     wget -N --no-check-certificate https://github.com/91yun/serverspeeder/raw/master/serverspeeder.sh && bash serverspeeder.sh
 }
 install_fs(){
-    wget  http://7xpt4s.com1.z0.glb.clouddn.com/install_fs.sh
+    wget  ${baseUrl}install_fs.sh
     chmod +x install_fs.sh
     ./install_fs.sh 2>&1 | tee install.log
     echo '在 crontab -e 加入下面'
@@ -38,21 +41,21 @@ install_ss(){
 install_ss1(){
     rm -rf shadowsocks.zip
     rm -rf shadowsocks
-    wget http://7xpt4s.com1.z0.glb.clouddn.com/shadowsocks.zip
+    wget ${baseUrl}shadowsocks.zip
     unzip shadowsocks.zip
 }
 install_ss2(){
     rm -rf SS2.zip
     rm -rf shadowsocks
-    wget http://7xpt4s.com1.z0.glb.clouddn.com/SS2.zip
+    wget ${baseUrl}SS2.zip
     unzip SS2.zip
 }
 start_sh(){
-    wget http://7xpt4s.com1.z0.glb.clouddn.com/start.sh  && bash start.sh
+    wget ${baseUrl}start.sh  && bash start.sh
     echo "0 */2 * * * bash /root/start.sh"
 }
 spam(){
-    wget http://7xpt4s.com1.z0.glb.clouddn.com/spam.sh && bash spam.sh
+    wget ${baseUrl}spam.sh && bash spam.sh
 }
 speedtest(){
     wget -O speedtest-cli https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py
@@ -60,12 +63,12 @@ speedtest(){
     ./speedtest-cli
 }
 supervisord(){
-    wget http://7xpt4s.com1.z0.glb.clouddn.com/supervisor.sh  && bash supervisor.sh
+    wget ${baseUrl}supervisor.sh  && bash supervisor.sh
 }
 change_rs_kernel(){
 	#更换锐速内核
-    rpm -ivh http://7xpt4s.com1.z0.glb.clouddn.com/kernel-firmware-2.6.32-504.3.3.el6.noarch.rpm
-    rpm -ivh http://7xpt4s.com1.z0.glb.clouddn.com/kernel-2.6.32-504.3.3.el6.x86_64.rpm --force
+    rpm -ivh ${baseUrl}kernel-firmware-2.6.32-504.3.3.el6.noarch.rpm
+    rpm -ivh ${baseUrl}kernel-2.6.32-504.3.3.el6.x86_64.rpm --force
 
     
     # rpm -ivh http://soft.91yun.org/ISO/Linux/CentOS/kernel/kernel-firmware-2.6.32-504.3.3.el6.noarch.rpm
@@ -76,10 +79,10 @@ change_rs_kernel(){
     # rpm -ivh http://ftp.riken.jp/Linux/scientific/6.4/x86_64/updates/security/kernel-2.6.32-504.3.3.el6.x86_64.rpm --force
 
 }
-install_ss3(){
+install_free(){
     rm -rf freessr.zip
     rm -rf shadowsocks
-    wget http://7xpt4s.com1.z0.glb.clouddn.com/freessr.zip
+    wget ${baseUrl}freessr.zip
     unzip freessr.zip
 }
 install_chacha20(){
@@ -132,7 +135,7 @@ install_iptables(){
 install_ss3(){
     rm -rf SS3.zip
     rm -rf shadowsocks
-    wget http://7xpt4s.com1.z0.glb.clouddn.com/SS3.zip
+    wget ${baseUrl}SS3.zip
     unzip SS3.zip
 }
 install_bbr(){
@@ -203,7 +206,7 @@ do
         	change_rs_kernel
         ;;
         12) 
-            install_ss3
+            install_free
         ;;
         13)
             install_chacha20
