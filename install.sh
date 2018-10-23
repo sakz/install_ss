@@ -41,13 +41,13 @@ install_ss(){
 install_ss1(){
     rm -rf shadowsocks.zip
     rm -rf shadowsocks
-    wget ${baseUrl}shadowsocks.zip
+    wget --no-check-certificate ${baseUrl}shadowsocks.zip
     unzip shadowsocks.zip
 }
 install_ss2(){
     rm -rf SS2.zip
     rm -rf shadowsocks
-    wget ${baseUrl}SS2.zip
+    wget --no-check-certificate ${baseUrl}SS2.zip
     unzip SS2.zip
 }
 start_sh(){
@@ -135,7 +135,7 @@ install_iptables(){
 install_ss3(){
     rm -rf SS3.zip
     rm -rf shadowsocks
-    wget ${baseUrl}SS3.zip
+    wget --no-check-certificate ${baseUrl}SS3.zip
     unzip SS3.zip
 }
 install_bbr(){
