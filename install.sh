@@ -130,7 +130,7 @@ install_ssl(){
     echo "生成的证书在/etc/letsencrypt/live/"$domain
 }
 install_iptables(){
-    wget -N --no-check-certificate https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/iptables-pf.sh && chmod +x iptables-pf.sh && bash iptables-pf.sh
+    wget -N --no-check-certificate https://raw.githubusercontent.com/sakz/doubi/master/iptables-pf.sh && chmod +x iptables-pf.sh && bash iptables-pf.sh
 }
 install_ss3(){
     rm -rf SS3.zip
