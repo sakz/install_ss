@@ -103,14 +103,14 @@ add_scholar_ipv6_hosts(){
 install_ovz_bbr(){
     yum install -y gcc g++
     echo "开始安装glibc-2.15"
-    wget http://ftp.gnu.org/gnu/glibc/glibc-2.15.tar.gz  
-    wget http://ftp.gnu.org/gnu/glibc/glibc-ports-2.15.tar.gz  
-    tar -xvf  glibc-2.15.tar.gz  
-    tar -xvf  glibc-ports-2.15.tar.gz  
-    mv glibc-ports-2.15 glibc-2.15/ports  
-    mkdir glibc-build-2.15    
-    cd glibc-build-2.15  
-    ../glibc-2.15/configure  --prefix=/usr --disable-profile --enable-add-ons --with-headers=/usr/include --with-binutils=/usr/bin  
+    wget http://ftp.gnu.org/gnu/glibc/glibc-2.15.tar.gz
+    wget http://ftp.gnu.org/gnu/glibc/glibc-ports-2.15.tar.gz
+    tar -xvf  glibc-2.15.tar.gz
+    tar -xvf  glibc-ports-2.15.tar.gz
+    mv glibc-ports-2.15 glibc-2.15/ports
+    mkdir glibc-build-2.15
+    cd glibc-build-2.15
+    ../glibc-2.15/configure  --prefix=/usr --disable-profile --enable-add-ons --with-headers=/usr/include --with-binutils=/usr/bin
     make && make install
 
     echo "开始安装ovz_bbr"
@@ -182,16 +182,16 @@ do
         0)
             ulimit
         ;;
-        1)  
+        1)
             install_rs
         ;;
-        2)  
+        2)
             install_fs
         ;;
-        3)  
+        3)
             install_vnstat_iftop
         ;;
-        4)  
+        4)
             install_ss
         ;;
         5)
@@ -209,13 +209,13 @@ do
         9)
             speedtest
         ;;
-        10) 
+        10)
             supervisord
         ;;
         11)
         	change_rs_kernel
         ;;
-        12) 
+        12)
             install_free
         ;;
         13)
