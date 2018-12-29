@@ -70,7 +70,6 @@ change_rs_kernel(){
     rpm -ivh ${baseUrl}kernel-firmware-2.6.32-504.3.3.el6.noarch.rpm
     rpm -ivh ${baseUrl}kernel-2.6.32-504.3.3.el6.x86_64.rpm --force
 
-    
     # rpm -ivh http://soft.91yun.org/ISO/Linux/CentOS/kernel/kernel-firmware-2.6.32-504.3.3.el6.noarch.rpm
     # rpm -ivh http://soft.91yun.org/ISO/Linux/CentOS/kernel/kernel-2.6.32-504.3.3.el6.x86_64.rpm --force
 
@@ -141,6 +140,9 @@ install_ss3(){
 install_bbr(){
     wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh && chmod +x bbr.sh && ./bbr.sh
 }
+install_axel(){
+    wget ${baseUrl}axel-2.4-1.el6.rf.x86_64.rpm  && rpm -ivh axel-2.4-1.el6.rf.x86_64.rpm
+}
 while :
 do
     echo "部署后端ss脚本："
@@ -166,6 +168,7 @@ do
     echo '18: 下载安装SS3'
     echo '19: 初始化vps'
     echo '20: 安装bbr'
+    echo '21: 安装axel'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
     case $choice in
@@ -236,7 +239,10 @@ do
         20)
             install_bbr
         ;;
-        *)  
+        21)
+            install_axel
+        ;;
+        *)
             echo '退出脚本！'
             break;
         ;;
