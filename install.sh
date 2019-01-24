@@ -144,10 +144,10 @@ install_axel(){
     wget ${baseUrl}axel-2.4-1.el6.rf.x86_64.rpm  && rpm -ivh axel-2.4-1.el6.rf.x86_64.rpm
 }
 install_node(){
-    # read -p "输入node版本：" node
-    # vnstat -u -i $network_card
     curl --silent --location https://rpm.nodesource.com/setup_10.x | sudo bash -
     yum install -y nodejs
+    npm i -g pm2
+    pm2 start shadowsocks/server.py > /dev/null 2>&1
 }
 while :
 do
@@ -175,7 +175,7 @@ do
     echo '19: 初始化vps'
     echo '20: 安装bbr'
     echo '21: 安装axel'
-    echo '22: 安装node'
+    echo '22: 安装node和pm2'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
     case $choice in
