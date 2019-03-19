@@ -149,6 +149,9 @@ install_node(){
     npm i -g pm2
     pm2 start shadowsocks/server.py > /dev/null 2>&1
 }
+install_redis(){
+    wget --no-check-certificate ${baseUrl}install-redis.sh && bash install-redis.sh
+}
 while :
 do
     echo "部署后端ss脚本："
@@ -176,6 +179,7 @@ do
     echo '20: 安装bbr'
     echo '21: 安装axel'
     echo '22: 安装node和pm2'
+    echo '23: 安装redis'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
     case $choice in
@@ -213,7 +217,7 @@ do
             supervisord
         ;;
         11)
-        	change_rs_kernel
+            change_rs_kernel
         ;;
         12)
             install_free
@@ -251,6 +255,9 @@ do
         ;;
         22)
             install_node
+        ;;
+        23)
+            install_redis
         ;;
         *)
             echo '退出脚本！'
