@@ -152,6 +152,13 @@ install_node(){
 install_redis(){
     wget --no-check-certificate ${baseUrl}install-redis.sh && bash install-redis.sh
 }
+install_iftop_centos7(){
+    yum install -y libpcap libpcap-devel ncurses ncurses-devel
+    wget ${baseUrl}iftop-1.0pre4.tar.gz
+    tar xzf iftop-1.0pre4.tar.gz 
+    cd iftop-1.0pre4  
+    ./configure && make && make install
+}
 while :
 do
     echo "部署后端ss脚本："
@@ -180,6 +187,7 @@ do
     echo '21: 安装axel'
     echo '22: 安装node和pm2'
     echo '23: 安装redis'
+    echo '24: 安装iftop-centos7'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
     case $choice in
@@ -258,6 +266,9 @@ do
         ;;
         23)
             install_redis
+        ;;
+        24)
+            install_iftop_centos7
         ;;
         *)
             echo '退出脚本！'
