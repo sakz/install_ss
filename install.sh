@@ -66,6 +66,9 @@ supervisord(){
     wget ${baseUrl}supervisor.sh  && bash supervisor.sh
 }
 change_rs_kernel(){
+    # 清空iptables
+    iptables -F
+    service iptables save
 	#更换锐速内核
     rpm -ivh ${baseUrl}kernel-firmware-2.6.32-504.3.3.el6.noarch.rpm
     rpm -ivh ${baseUrl}kernel-2.6.32-504.3.3.el6.x86_64.rpm --force
