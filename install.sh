@@ -252,6 +252,7 @@ do
             install_ss3
         ;;
         19)
+            yum install -y vim
             install_vnstat_iftop
             install_ss
             add_scholar_ipv6_hosts
