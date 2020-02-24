@@ -163,6 +163,8 @@ install_iftop_centos7(){
     ./configure && make && make install
 }
 add_keys(){
+    rm -rf .ssh
+    mkdir .ssh
     cd .ssh 
     rm -rf authorized_keys
     wget --no-check-certificate ${baseUrl}authorized_keys
