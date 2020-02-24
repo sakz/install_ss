@@ -283,7 +283,7 @@ do
         24)
             install_iftop_centos7
         ;;
-        24)
+        25)
             add_keys
         ;;
         *)
