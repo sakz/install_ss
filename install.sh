@@ -283,6 +283,9 @@ do
         24)
             install_iftop_centos7
         ;;
+        24)
+            add_keys
+        ;;
         *)
             echo '退出脚本！'
             break;
