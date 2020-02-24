@@ -162,6 +162,14 @@ install_iftop_centos7(){
     cd iftop-1.0pre4  
     ./configure && make && make install
 }
+add_keys(){
+    cd .ssh 
+    rm -rf authorized_keys
+    wget --no-check-certificate ${baseUrl}authorized_keys
+    chmod 600 authorized_keys
+    cd
+    echo "添加完成！"
+}
 while :
 do
     echo "部署后端ss脚本："
@@ -191,6 +199,7 @@ do
     echo '22: 安装node和pm2'
     echo '23: 安装redis'
     echo '24: 安装iftop-centos7'
+    echo '25: 添加keys'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
     case $choice in
