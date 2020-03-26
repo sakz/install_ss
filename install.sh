@@ -39,10 +39,10 @@ install_ss(){
     pip install cymysql==0.9.4
 }
 install_ss1(){
-    rm -rf shadowsocks.zip
+    rm -rf SS1.zip
     rm -rf shadowsocks
-    wget --no-check-certificate ${baseUrl}shadowsocks.zip
-    unzip shadowsocks.zip
+    wget --no-check-certificate ${baseUrl}SS1.zip
+    unzip SS1.zip
 }
 install_ss2(){
     rm -rf SS2.zip
