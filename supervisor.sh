@@ -9,3 +9,4 @@ wget -P /etc  ${baseUrl}supervisord.conf
 unlink /tmp/supervisor.sock
 supervisord -c /etc/supervisord.conf
 supervisorctl status
+curl cip.cc
