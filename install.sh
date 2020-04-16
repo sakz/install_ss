@@ -9,7 +9,7 @@ ulimit(){
     # echo "* - nofile $num" >> /etc/security/limits.conf
     echo "* - nofile 131072" >> /etc/security/limits.conf
     echo "修改/etc/security/limits.conf完成，准备重启"
-    reboot
+    # reboot
 }
 install_rs(){
     #下载安装
@@ -29,9 +29,12 @@ install_vnstat_iftop(){
     vnstat -u -i eth0
     service vnstat start
     chkconfig vnstat on
+    chown -R vnstat:vnstat /var/lib/vnstat/ # 设置vnstat数据库目录的所有者为vnstat用户
+    systemctl restart vnstat.service # 重启vnstat
 }
 install_ss(){
     # yum install -y python-setuptools && easy_install pip
+    yum install epel-release -y
     yum install -y python-setuptools
     yum install -y m2crypto git
     yum install -y unzip
@@ -267,8 +270,12 @@ do
             install_vnstat_iftop
             install_ss
             add_scholar_ipv6_hosts
-            change_rs_kernel
+            # change_rs_kernel
             ulimit
+            echo "安装加速并重启"
+            wget -N --no-check-certificate "https://raw.githubusercontent.com/sakz/install_ss/master/tcp.sh"
+            chmod +x tcp.sh
+            ./tcp.sh
         ;;
         20)
             install_bbr
