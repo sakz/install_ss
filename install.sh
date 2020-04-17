@@ -175,6 +175,17 @@ add_keys(){
     cd
     echo "添加完成！"
 }
+install_docker(){
+    yum install -y yum-utils
+    yum-config-manager \
+    --add-repo \
+    https://download.docker.com/linux/centos/docker-ce.repo
+    yum install docker-ce docker-ce-cli containerd.io
+    systemctl start docker
+    curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    chmod +x /usr/local/bin/docker-compose
+    ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+}
 while :
 do
     echo "部署后端ss脚本："
@@ -205,6 +216,7 @@ do
     echo '23: 安装redis'
     echo '24: 安装iftop-centos7'
     echo '25: 添加keys'
+    echo '26: 安装docker和docker-compose'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
     case $choice in
@@ -294,6 +306,9 @@ do
         ;;
         25)
             add_keys
+        ;;
+        26)
+            install_docker
         ;;
         *)
             echo '退出脚本！'
