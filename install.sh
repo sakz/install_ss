@@ -186,6 +186,11 @@ install_docker(){
     chmod +x /usr/local/bin/docker-compose
     ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 }
+install_v2ray(){
+    wget ${baseUrl}v2ray_ws_tls1.3.sh
+    chmod +x v2ray_ws_tls1.3.sh
+    ./v2ray_ws_tls1.3.sh
+}
 while :
 do
     echo "部署后端ss脚本："
@@ -217,6 +222,7 @@ do
     echo '24: 安装iftop-centos7'
     echo '25: 添加keys'
     echo '26: 安装docker和docker-compose'
+    echo '27: 安装v2ray'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
     case $choice in
@@ -309,6 +315,9 @@ do
         ;;
         26)
             install_docker
+        ;;
+        27)
+            install_v2ray
         ;;
         *)
             echo '退出脚本！'
