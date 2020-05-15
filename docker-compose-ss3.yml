@@ -19,6 +19,6 @@ services:
     links:
       - v2ray
     environment:
-      V2SCAR_SYNC_TIME: 60
+      V2SCAR_SYNC_TIME: 120
       V2SCAR_API_ENDPOINT: "https://sub.o4o.win/api/user_vmess_config/ss3"
       V2SCAR_GRPC_ENDPOINT: "v2ray:8080"
