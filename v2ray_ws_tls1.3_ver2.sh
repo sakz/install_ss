@@ -41,6 +41,7 @@ install_nginx(){
     cd /etc
     wget http://tmp.o1o.win/IejJz/nginx.zip
     yum install -y unzip
+    yum install -y openssl
     unzip nginx.zip
     
     green "====输入解析到此VPS的域名===="
