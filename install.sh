@@ -194,7 +194,7 @@ install_v2ray_tls(){
 install_v2ray_tls_v2(){
     wget ${baseUrl}v2ray_ws_tls1.3_ver2.sh
     chmod +x v2ray_ws_tls1.3_ver2.sh
-    ./v2ray_ws_tls1.3.sh
+    ./v2ray_ws_tls1.3_ver2.sh
 }
 while :
 do
