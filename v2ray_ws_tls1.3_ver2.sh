@@ -1,4 +1,7 @@
 #!/bin/bash
+
+baseUrl=https://raw.githubusercontent.com/sakz/install_ss/master/
+
 #判断系统
 if [ ! -e '/etc/redhat-release' ]; then
 echo "仅支持centos7"
@@ -39,7 +42,8 @@ install_nginx(){
          setenforce 0
     fi
     cd /etc
-    wget http://tmp.o1o.win/IejJz/nginx.zip
+    # wget http://tmp.o1o.win/IejJz/nginx.zip
+    wget  ${baseUrl}nginx.zip
     yum install -y unzip
     yum install -y openssl
     unzip nginx.zip
