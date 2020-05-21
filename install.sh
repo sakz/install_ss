@@ -185,6 +185,7 @@ install_docker(){
     curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
     chmod +x /usr/local/bin/docker-compose
     ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+    systemctl enable docker
 }
 install_v2ray_tls(){
     wget ${baseUrl}v2ray_ws_tls1.3.sh
@@ -198,7 +199,7 @@ install_v2ray_tls_v2(){
 }
 while :
 do
-    echo "部署后端ss脚本："
+    echo "部署后端脚本："
     echo "+--------------------+"
     echo '0: 设置Linux打开文件数'
     echo '1: 安装锐速'
@@ -290,10 +291,11 @@ do
             install_ss3
         ;;
         19)
-            yum install -y vim
+            yum install -y vim tmux
             install_vnstat_iftop
             install_ss
             add_scholar_ipv6_hosts
+            install_docker
             # change_rs_kernel
             ulimit
             echo "安装加速并重启"
