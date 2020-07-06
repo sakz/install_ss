@@ -197,6 +197,11 @@ install_v2ray_tls_v2(){
     chmod +x v2ray_ws_tls1.3_ver2.sh
     ./v2ray_ws_tls1.3_ver2.sh
 }
+addCron() {
+    wget ${baseUrl}addCron.sh
+    chmod +x addCron.sh
+    ./addCron.sh
+}
 while :
 do
     echo "部署后端脚本："
@@ -230,6 +235,7 @@ do
     echo '26: 安装docker和docker-compose'
     echo '27: 安装v2ray_tls'
     echo '28: 安装v2ray_tls_v2'
+    echo '29: addCron'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
     case $choice in
