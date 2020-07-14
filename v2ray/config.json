@@ -1,52 +1,59 @@
 {
-  "inbounds": [{
-    "port": 7000,
-    "protocol": "vmess",
-    "settings": {
-      "clients": [
+    "inbounds": [
         {
-          "id": "d659fee5-9d92-41bc-ba84-353cc5ae806c",
-          "level": 1,
-          "alterId": 64
+            "port": 24820,
+            "protocol": "vmess",
+            "settings": {
+                "clients": [
+                    {
+                        "id": "a3d78062-1ba1-4007-bd5c-96d1efa36881",
+                        "level": 1,
+                        "alterId": 64
+                    }
+                ]
+            }
+        },
+        {
+            "port": 80,
+            "protocol": "vmess",
+            "settings": {
+                "clients": [
+                    {
+                        "id": "d858f982-a2fa-8df3-7e7f-da0067d3aff5",
+                        "level": 1,
+                        "alterId": 64
+                    }
+                ]
+            },
+            "streamSettings": {
+                "wsSettings": {
+                    "path": "/",
+                    "headers": {}
+                },
+                "network": "ws"
+            }
         }
-      ]
+    ],
+    "outbounds": [
+        {
+            "protocol": "freedom",
+            "settings": {}
+        },
+        {
+            "protocol": "blackhole",
+            "settings": {},
+            "tag": "blocked"
+        }
+    ],
+    "routing": {
+        "rules": [
+            {
+                "type": "field",
+                "ip": [
+                    "geoip:private"
+                ],
+                "outboundTag": "blocked"
+            }
+        ]
     }
-  },
-{
-  "settings":{
-    "clients":[
-      {
-        "id":"d858f982-a2fa-8df3-7e7f-da0067d3aff5",
-        "alterId":64
-      }
-    ]
-  },
-  "protocol":"vmess",
-  "port":80,
-  "streamSettings":{
-    "wsSettings":{
-      "path":"/",
-      "headers":{}
-    },
-    "network":"ws"
-  }
-}
-],
-  "outbounds": [{
-    "protocol": "freedom",
-    "settings": {}
-  },{
-    "protocol": "blackhole",
-    "settings": {},
-    "tag": "blocked"
-  }],
-  "routing": {
-    "rules": [
-      {
-        "type": "field",
-        "ip": ["geoip:private"],
-        "outboundTag": "blocked"
-      }
-    ]
-  }
 }
