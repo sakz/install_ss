@@ -336,6 +336,9 @@ do
         28)
             install_v2ray_tls_v2
         ;;
+        29)
+            addCron
+        ;;
         *)
             echo '退出脚本！'
             break;
