@@ -204,8 +204,9 @@ addCron() {
 }
 addTmpCli() {
     cd /usr/local/bin
-    wget https://github.com/sakz/transfer-cli/releases/download/v0.0.4/transfer-cli_0.0.4_Linux_x86_64.tar.gz
-    tar zxvf transfer-cli_0.0.4_Linux_x86_64.tar.gz
+    tag=v0.0.4
+    wget https://github.com/sakz/transfer-cli/releases/download/v${tag}/transfer-cli_${tag}_Linux_x86_64.tar.gz
+    tar zxvf transfer-cli_${tag}_Linux_x86_64.tar.gz
     cp transfer-cli tmp
     cd 
     echo "安装完成"
