@@ -197,6 +197,11 @@ install_v2ray_tls_v2(){
     chmod +x v2ray_ws_tls1.3_ver2.sh
     ./v2ray_ws_tls1.3_ver2.sh
 }
+install_v2ray_tls_v3(){
+    wget ${baseUrl}v2ray_ws_tls1.3_ver3.sh
+    chmod +x v2ray_ws_tls1.3_ver3.sh
+    ./v2ray_ws_tls1.3_ver3.sh
+}
 addCron() {
     wget ${baseUrl}addCron.sh
     chmod +x addCron.sh
@@ -243,7 +248,7 @@ do
     echo '25: 添加keys'
     echo '26: 安装docker和docker-compose'
     echo '27: 安装v2ray_tls'
-    echo '28: 安装v2ray_tls_v2'
+    echo '28: 安装v2ray_tls_v3'
     echo '29: addCron'
     echo '30: addTmpCli'
     echo 'q: 退出安装脚本'
@@ -344,7 +349,7 @@ do
             install_v2ray_tls
         ;;
         28)
-            install_v2ray_tls_v2
+            install_v2ray_tls_v3
         ;;
         29)
             addCron
