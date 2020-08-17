@@ -317,6 +317,7 @@ do
             install_ss
             add_scholar_ipv6_hosts
             install_docker
+            addTmpCli
             # change_rs_kernel
             ulimit
             echo "安装加速并重启"
