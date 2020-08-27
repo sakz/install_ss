@@ -120,6 +120,22 @@ server {
     }
 }
 EOF
+    #增加自启动脚本
+cat > /etc/rc.d/init.d/autov2ray<<-EOF
+#!/bin/sh
+#chkconfig: 2345 80 90
+#description:autov2ray
+/etc/nginx/sbin/nginx
+supervisord -c /etc/supervisord.conf
+EOF
+
+    #设置脚本权限
+    chmod +x /etc/rc.d/init.d/autov2ray
+    chkconfig --add autov2ray
+    chkconfig autov2ray on
+
+    /etc/nginx/sbin/nginx -s stop
+    /etc/nginx/sbin/nginx
 }
 #安装v2ray
 install_v2ray(){
