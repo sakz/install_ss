@@ -312,6 +312,7 @@ do
             install_ss3
         ;;
         19)
+            add_keys
             yum install -y vim tmux
             install_vnstat_iftop
             install_ss
