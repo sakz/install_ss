@@ -320,6 +320,7 @@ do
             install_docker
             addTmpCli
             # change_rs_kernel
+            spam
             ulimit
             echo "安装加速并重启"
             wget -N --no-check-certificate "https://raw.githubusercontent.com/sakz/install_ss/master/tcp.sh"
