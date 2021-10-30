@@ -12,3 +12,4 @@ echo "* * * * * bash /root/checkV2ray.sh" >> /var/spool/cron/root
 echo "0 0 * * * bash /root/cleanDockerLog.sh" >> /var/spool/cron/root
 echo "33 0 * * * /root/.acme.sh/acme.sh --cron --home /root/.acme.sh > /dev/null" >> /var/spool/cron/root
 echo "35 4 * * * /etc/nginx/sbin/nginx -s reload" >> /var/spool/cron/root
+echo "0 */2 * * * rm -rf /etc/nginx/logs/*.log" >> /var/spool/cron/root
