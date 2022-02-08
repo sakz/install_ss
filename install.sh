@@ -316,7 +316,7 @@ do
             yum install -y vim tmux
             install_vnstat_iftop
             install_ss
-            add_scholar_ipv6_hosts
+            # add_scholar_ipv6_hosts
             install_docker
             addTmpCli
             # change_rs_kernel
