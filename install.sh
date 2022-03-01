@@ -216,6 +216,11 @@ addTmpCli() {
     cd 
     echo "安装完成"
 }
+updateCa() {
+    yum install ca-certificates
+    update-ca-trust force-enable
+    update-ca-trust extract
+}
 while :
 do
     echo "部署后端脚本："
@@ -319,6 +324,7 @@ do
             # add_scholar_ipv6_hosts
             install_docker
             addTmpCli
+            updateCa
             # change_rs_kernel
             spam
             ulimit
