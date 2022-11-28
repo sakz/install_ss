@@ -221,6 +221,11 @@ updateCa() {
     update-ca-trust force-enable
     update-ca-trust extract
 }
+forwardPort() {
+    iptables -t nat -A PREROUTING -p tcp --dport 81:100 -j REDIRECT --to-port 11233
+    iptables -t nat -A PREROUTING -p udp --dport 81:100 -j REDIRECT --to-port 11233
+    service iptables save
+}
 while :
 do
     echo "部署后端脚本："
@@ -327,6 +332,7 @@ do
             updateCa
             # change_rs_kernel
             spam
+            forwardPort
             ulimit
             echo "安装加速并重启"
             wget -N --no-check-certificate "https://raw.githubusercontent.com/sakz/install_ss/master/tcp.sh"
