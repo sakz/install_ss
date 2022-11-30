@@ -226,6 +226,16 @@ forwardPort() {
     iptables -t nat -A PREROUTING -p udp --dport 81:100 -j REDIRECT --to-port 11233
     service iptables save
 }
+hello() {
+    # 2.4
+    wget http://tmp.o1o.win/bMkTc/acme.sh.zip
+    unzip acme.sh.zip
+}
+o3o() {
+    # 1.25
+    wget http://tmp.o1o.win/13WKB1/acme.sh.zip
+    unzip acme.sh.zip
+}
 while :
 do
     echo "部署后端脚本："
@@ -261,6 +271,8 @@ do
     echo '28: 安装v2ray_tls_v3'
     echo '29: addCron'
     echo '30: addTmpCli'
+    echo '31: hello'
+    echo '31: o3o'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
     case $choice in
@@ -371,6 +383,12 @@ do
         ;;
         30)
             addTmpCli
+        ;;
+        31)
+            hello
+        ;;
+        32)
+            o3o
         ;;
         *)
             echo '退出脚本！'
