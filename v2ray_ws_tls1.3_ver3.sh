@@ -47,8 +47,15 @@ install_nginx(){
     yum install -y openssl
     unzip nginx.zip
     
-    green "====输入解析到此VPS的域名===="
-    read domain
+    # green "====输入解析到此VPS的域名===="
+    # read domain
+    if [ -z "$1" ];then
+        green "====输入解析到此VPS的域名===="
+        read domain
+    else
+        domain=$1
+    exit
+    fi
     
 cat > /etc/nginx/conf/nginx.conf <<-EOF
 user  root;
@@ -224,6 +231,8 @@ start_menu(){
     echo
     green " 1. 安装v2ray+ws+tls1.3"
     green " 2. 升级v2ray"
+    green " 4. hello"
+    green " 5. o3o"
     red " 3. 卸载v2ray"
     yellow " 0. 退出脚本"
     echo
@@ -232,6 +241,12 @@ start_menu(){
     1)
     install_nginx
     # install_v2ray
+    ;;
+    4)
+    install_nginx "helloking.win"
+    ;;
+    5)
+    install_nginx "o3o3o.top"
     ;;
     2)
     bash <(curl -L -s https://install.direct/go.sh)  
