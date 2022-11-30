@@ -54,7 +54,6 @@ install_nginx(){
         read domain
     else
         domain=$1
-    exit
     fi
     
 cat > /etc/nginx/conf/nginx.conf <<-EOF
