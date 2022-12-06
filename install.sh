@@ -272,7 +272,7 @@ do
     echo '29: addCron'
     echo '30: addTmpCli'
     echo '31: hello'
-    echo '31: o3o'
+    echo '32: o3o'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
     case $choice in
