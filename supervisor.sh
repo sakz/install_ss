@@ -9,4 +9,5 @@ wget -P /etc  ${baseUrl}supervisord.conf
 unlink /tmp/supervisor.sock
 supervisord -c /etc/supervisord.conf
 supervisorctl status
+echo "0 5 * * * pkill supervisord; supervisord -c /etc/supervisord.conf" >> /var/spool/cron/root
 curl cip.cc
