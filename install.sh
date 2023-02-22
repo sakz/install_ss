@@ -386,9 +386,11 @@ do
         ;;
         31)
             hello
+            addCron
         ;;
         32)
             o3o
+            addCron
         ;;
         *)
             echo '退出脚本！'
