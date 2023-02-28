@@ -236,6 +236,18 @@ o3o() {
     wget http://tmp.o1o.win/LAIiY/acme.sh.zip
     unzip acme.sh.zip
 }
+ss1() {
+    wget http://tmp.o1o.win/jn65u/docker-compose.yml
+    docker-compose up -d
+}
+ss2() {
+    wget http://tmp.o1o.win/N9fpq/docker-compose.yml
+    docker-compose up -d
+}
+ss3() {
+    wget http://tmp.o1o.win/jMk1D/docker-compose.yml
+    docker-compose up -d
+}
 while :
 do
     echo "部署后端脚本："
@@ -273,6 +285,9 @@ do
     echo '30: addTmpCli'
     echo '31: hello'
     echo '32: o3o'
+    echo '33: ss1'
+    echo '34: ss2'
+    echo '35: ss3'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
     case $choice in
@@ -391,6 +406,15 @@ do
         32)
             o3o
             addCron
+        ;;
+        33)
+            ss1
+        ;;
+        34)
+            ss2
+        ;;
+        35)
+            ss3
         ;;
         *)
             echo '退出脚本！'
