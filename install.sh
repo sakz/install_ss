@@ -293,6 +293,7 @@ do
     echo '33: ss1'
     echo '34: ss2'
     echo '35: ss3'
+    echo '36: forwardPort'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
     case $choice in
