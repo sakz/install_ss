@@ -227,6 +227,8 @@ updateCa() {
 forwardPort() {
     iptables -t nat -A PREROUTING -p tcp --dport 81:100 -j REDIRECT --to-port 11233
     iptables -t nat -A PREROUTING -p udp --dport 81:100 -j REDIRECT --to-port 11233
+    iptables -t nat -A PREROUTING -p tcp --dport 2000:3000 -j REDIRECT --to-port 11233
+    iptables -t nat -A PREROUTING -p udp --dport 2000:3000 -j REDIRECT --to-port 11233
     service iptables save
 }
 hello() {
@@ -362,7 +364,6 @@ do
             updateCa
             # change_rs_kernel
             spam
-            forwardPort
             add_video_hosts
             ulimit
             echo "安装加速并重启"
@@ -419,6 +420,9 @@ do
         ;;
         35)
             ss3
+        ;;
+        36)
+            forwardPort
         ;;
         *)
             echo '退出脚本！'
