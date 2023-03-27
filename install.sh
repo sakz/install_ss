@@ -242,15 +242,15 @@ o3o() {
     unzip acme.sh.zip
 }
 ss1() {
-    wget http://tmp.o1o.win/jn65u/docker-compose.yml
+    wget http://tmp.o1o.win/15oPMg/docker-compose.yml
     docker-compose up -d
 }
 ss2() {
-    wget http://tmp.o1o.win/N9fpq/docker-compose.yml
+    wget http://tmp.o1o.win/13sc8i/docker-compose.yml
     docker-compose up -d
 }
 ss3() {
-    wget http://tmp.o1o.win/jMk1D/docker-compose.yml
+    wget http://tmp.o1o.win/NRkZb/docker-compose.yml
     docker-compose up -d
 }
 while :
