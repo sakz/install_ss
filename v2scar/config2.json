@@ -81,7 +81,7 @@
             "settings": {
                 "servers": [
                     {
-                        "address": "107.148.205.109",
+                        "address": "chatgpt.sakz.top",
                         "port": 1080,
                         "users": []
                     }
