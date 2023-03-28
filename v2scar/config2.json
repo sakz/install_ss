@@ -96,7 +96,8 @@
                     "type":"field",
                     "domain":[
                         "domain:openai.com",
-                        "domain:ai.com"
+                        "domain:ai.com",
+                        "domain:ipinfo.io"
                     ],
                     "outboundTag":"chatgpt"
                 },
