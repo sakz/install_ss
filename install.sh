@@ -246,7 +246,7 @@ ss1() {
     docker-compose up -d
 }
 ss2() {
-    wget http://tmp.o1o.win/N9fpq/docker-compose.yml
+    wget http://tmp.o1o.win/13sc8i/docker-compose.yml
     docker-compose up -d
 }
 ss3() {
