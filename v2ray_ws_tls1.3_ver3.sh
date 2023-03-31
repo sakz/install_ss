@@ -232,6 +232,7 @@ start_menu(){
     green " 2. 升级v2ray"
     green " 4. hello"
     green " 5. o3o"
+    green " 6. o5o"
     red " 3. 卸载v2ray"
     yellow " 0. 退出脚本"
     echo
@@ -246,6 +247,9 @@ start_menu(){
     ;;
     5)
     install_nginx "o3o3o.top"
+    ;;
+    6)
+    install_nginx "o5o5o.top_ecc"
     ;;
     2)
     bash <(curl -L -s https://install.direct/go.sh)  

@@ -241,6 +241,11 @@ o3o() {
     wget http://tmp.o1o.win/LAIiY/acme.sh.zip
     unzip acme.sh.zip
 }
+o5o() {
+    # 6.30
+    wget http://tmp.o1o.win/5Lzeh/acme.sh.zip
+    unzip acme.sh.zip
+}
 ss1() {
     wget http://tmp.o1o.win/15oPMg/docker-compose.yml
     docker-compose up -d
@@ -294,6 +299,7 @@ do
     echo '34: ss2'
     echo '35: ss3'
     echo '36: forwardPort'
+    echo '37: o5o'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
     case $choice in
@@ -424,6 +430,10 @@ do
         ;;
         36)
             forwardPort
+        ;;
+        37)
+            o5o
+            addCron
         ;;
         *)
             echo '退出脚本！'
