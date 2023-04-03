@@ -90,6 +90,7 @@ server {
 }
 server {
     listen 443 ssl http2;
+    listen 444 ssl http2;
     server_name $domain;
     root /etc/nginx/html;
     index index.php index.html;
