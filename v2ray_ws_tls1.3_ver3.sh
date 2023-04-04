@@ -250,7 +250,7 @@ start_menu(){
     install_nginx "o3o3o.top"
     ;;
     6)
-    install_nginx "o5o5o.top_ecc"
+    install_nginx "o5o5o.top"
     ;;
     2)
     bash <(curl -L -s https://install.direct/go.sh)  
