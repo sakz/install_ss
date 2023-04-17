@@ -83,11 +83,7 @@
                     {
                         "address": "chatgpt.sakz.top",
                         "port": 1090,
-                        "users": [{
-                            "user": "kingfast",
-                            "pass": "chatgpt",
-                            "level": 0
-                        }]
+                        "users": []
                     }
                 ]
             }

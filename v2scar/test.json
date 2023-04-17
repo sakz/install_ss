@@ -89,7 +89,7 @@
                 "servers": [
                     {
                         "address": "chatgpt.sakz.top",
-                        "port": 1080,
+                        "port": 1090,
                         "users": []
                     }
                 ]

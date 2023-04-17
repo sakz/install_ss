@@ -82,7 +82,7 @@
                 "servers": [
                     {
                         "address": "chatgpt3.sakz.top",
-                        "port": 1080,
+                        "port": 1090,
                         "users": []
                     }
                 ]
