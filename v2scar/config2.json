@@ -85,7 +85,8 @@
                         "port": 1090,
                         "users": [{
                             "user": "kingfast",
-                            "pass": "chatgpt"
+                            "pass": "chatgpt",
+                            "level": 0
                         }]
                     }
                 ]
