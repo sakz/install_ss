@@ -250,6 +250,10 @@ ss1() {
     wget http://tmp.o1o.win/15oPMg/docker-compose.yml
     docker-compose up -d
 }
+ss1_4_40_1() {
+    wget http://tmp.o1o.win/sXZqR/docker-compose.yml
+    docker-compose up -d
+}
 ss2() {
     wget http://tmp.o1o.win/13sc8i/docker-compose.yml
     docker-compose up -d
@@ -293,13 +297,14 @@ do
     echo '28: 安装v2ray_tls_v3'
     echo '29: addCron'
     echo '30: addTmpCli'
-    echo '31: hello'
-    echo '32: o3o'
-    echo '33: ss1'
-    echo '34: ss2'
-    echo '35: ss3'
+    echo '31: hello-acme'
+    echo '32: o3o-acme'
+    echo '33: ss1-docker'
+    echo '34: ss2-docker'
+    echo '35: ss3-docker'
     echo '36: forwardPort'
-    echo '37: o5o'
+    echo '37: o5o-acme'
+    echo '38: o5o-docker'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
     case $choice in
@@ -434,6 +439,9 @@ do
         37)
             o5o
             addCron
+        ;;
+        38)
+            ss1_4_40_1
         ;;
         *)
             echo '退出脚本！'
