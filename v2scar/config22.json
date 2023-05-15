@@ -45,6 +45,13 @@
             }
         },
         {
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls"
+                ]
+            },
             "settings": {
                 "clients": []
             },
@@ -82,11 +89,16 @@
                 "servers": [
                     {
                         "address": "chatgpt.sakz.top",
-                        "port": 1080,
+                        "port": 1090,
                         "users": []
                     }
                 ]
             }
+        },
+        {
+            "protocol": "blackhole",
+            "settings": {},
+            "tag": "block"
         }
     ],
     "routing": {
@@ -97,10 +109,16 @@
                     "domain":[
                         "domain:openai.com",
                         "domain:ai.com",
-                        "domain:ipinfo.io",
-                        "domain:cloudflare.com"
+                        "domain:ipinfo.io"
                     ],
                     "outboundTag":"chatgpt"
+                },
+                {
+                    "type": "field",
+                    "outboundTag": "block",
+                    "protocol": [
+                        "bittorrent"
+                    ]
                 },
                 {
                     "inboundTag": [
