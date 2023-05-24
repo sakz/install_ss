@@ -156,7 +156,7 @@ install_node(){
     curl --silent --location https://rpm.nodesource.com/setup_16.x | sudo bash -
     yum install -y nodejs
     npm i -g pm2
-    pm2 start shadowsocks/server.py > /dev/null 2>&1
+    # pm2 start shadowsocks/server.py > /dev/null 2>&1
 }
 install_redis(){
     wget --no-check-certificate ${baseUrl}install-redis.sh && bash install-redis.sh
