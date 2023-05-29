@@ -232,8 +232,8 @@ forwardPort() {
     service iptables save
 }
 hello() {
-    # 6.9
-    wget http://tmp.o1o.win/KSX3s/acme.sh.zip
+    # 8.26
+    wget http://tmp.o1o.win/4m8O0/acme.sh.zip
     unzip acme.sh.zip
 }
 o3o() {
@@ -261,6 +261,11 @@ ss2() {
 ss3() {
     wget http://tmp.o1o.win/NRkZb/docker-compose.yml
     docker-compose up -d
+}
+install_oh_my_zsh() {
+    yum install -y zsh
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 }
 while :
 do
