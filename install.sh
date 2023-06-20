@@ -371,6 +371,7 @@ do
             install_ss3
         ;;
         19)
+            timedatectl set-timezone Asia/Shanghai
             add_keys
             yum install -y vim tmux
             install_vnstat_iftop
