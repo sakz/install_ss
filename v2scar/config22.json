@@ -121,6 +121,7 @@
                         "domain:iqiyi.com",
                         "regexp:(api|ps|sv|offnavi|newvector|ulog.imap|newloc)(.map|).(baidu|n.shifen).com",
                         "regexp:(.+.|^)(360|so).(cn|com)",
+                        "regexp:(.*.||)(guan­jia.qq.com|qqpcmgr|QQPCMGR)",
                         "regexp:(.*.||)(ris­ing|king­soft|duba|xin­dubawukong|jin­shan­duba).(com|net|org)"
                     ],
                     "outboundTag":"block"
