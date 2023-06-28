@@ -118,7 +118,9 @@
                     "domain":[
                         "domain:v.qq.com",
                         "domain:youku.com",
-                        "domain:iqiyi.com"
+                        "domain:iqiyi.com",
+                        "regexp:(api|ps|sv|offnavi|newvector|ulog.imap|newloc)(.map|).(baidu|n.shifen).com",
+                        "regexp:(.+.|^)(360|so).(cn|com)"
                     ],
                     "outboundTag":"block"
                 },
