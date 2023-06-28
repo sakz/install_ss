@@ -114,6 +114,15 @@
                     "outboundTag":"chatgpt"
                 },
                 {
+                    "type":"field",
+                    "domain":[
+                        "domain:v.qq.com",
+                        "domain:youku.com",
+                        "domain:iqiyi.com"
+                    ],
+                    "outboundTag":"block"
+                },
+                {
                     "type": "field",
                     "outboundTag": "block",
                     "protocol": [
