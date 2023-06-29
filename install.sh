@@ -242,8 +242,8 @@ o3o() {
     unzip acme.sh.zip
 }
 o5o() {
-    # 6.30
-    wget http://tmp.o1o.win/wiwUv/acme.sh.zip
+    # 9.22
+    wget http://tmp.o1o.win/12IagQ/acme.sh.zip
     unzip acme.sh.zip
 }
 ss1() {
