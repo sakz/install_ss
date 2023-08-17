@@ -232,8 +232,8 @@ forwardPort() {
     service iptables save
 }
 hello() {
-    # 8.26
-    wget http://tmp.o1o.win/4m8O0/acme.sh.zip
+    # 10.24
+    wget http://tmp.o1o.win/FyJaF/acme.sh.zip
     unzip acme.sh.zip
 }
 o3o() {
