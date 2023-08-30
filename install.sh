@@ -237,8 +237,8 @@ hello() {
     unzip acme.sh.zip
 }
 o3o() {
-    # 7.22
-    wget http://tmp.o1o.win/Fd4v8/acme.sh.zip
+    # 11.4
+    wget http://tmp.o1o.win/lR93L/acme.sh.zip
     unzip acme.sh.zip
 }
 o5o() {
