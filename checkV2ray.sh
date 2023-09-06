@@ -1,7 +1,7 @@
 #! /bin/bash
 
-num=$(docker ps | wc -l)
+num=$(docker-compose ps | grep Up | wc -l)
 echo $num
-if [ "$num" == "2" ];then
+if [ "$num" != "2" ];then
     docker-compose restart
 fi
