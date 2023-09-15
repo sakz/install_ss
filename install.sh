@@ -153,8 +153,10 @@ install_axel(){
     wget ${baseUrl}axel-2.4-1.el6.rf.x86_64.rpm  && rpm -ivh axel-2.4-1.el6.rf.x86_64.rpm
 }
 install_node(){
-    curl --silent --location https://rpm.nodesource.com/setup_16.x | sudo bash -
-    yum install -y nodejs
+    # curl --silent --location https://rpm.nodesource.com/setup_16.x | sudo bash -
+    # yum install -y nodejs
+    yum install https://rpm.nodesource.com/pub_16.x/nodistro/repo/nodesource-release-nodistro-1.noarch.rpm -y
+    yum install nodejs -y --setopt=nodesource-nodejs.module_hotfixes=1
     npm i -g pm2
     # pm2 start shadowsocks/server.py > /dev/null 2>&1
 }
