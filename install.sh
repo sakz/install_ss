@@ -214,9 +214,10 @@ addCron() {
 }
 addTmpCli() {
     cd /usr/local/bin
+    rm -rf transfer-cli tmp
     tag=0.0.4
-    wget https://github.com/sakz/transfer-cli/releases/download/v${tag}/transfer-cli_${tag}_Linux_x86_64.tar.gz
-    tar zxvf transfer-cli_${tag}_Linux_x86_64.tar.gz
+    wget https://github.com/sakz/transfer-cli/releases/download/v${tag}/transfer-cli_Linux_x86_64.tar.gz
+    tar zxvf transfer-cli_Linux_x86_64.tar.gz
     cp transfer-cli tmp
     cd 
     echo "安装完成"
@@ -235,33 +236,33 @@ forwardPort() {
 }
 hello() {
     # 10.24
-    wget http://tmp.o1o.win/FyJaF/acme.sh.zip
+    wget http://tmp.o3o.top/FyJaF/acme.sh.zip
     unzip acme.sh.zip
 }
 o3o() {
     # 11.4
-    wget http://tmp.o1o.win/lR93L/acme.sh.zip
+    wget http://tmp.o3o.top/lR93L/acme.sh.zip
     unzip acme.sh.zip
 }
 o5o() {
     # 9.22
-    wget http://tmp.o1o.win/12IagQ/acme.sh.zip
+    wget http://tmp.o3o.top/12IagQ/acme.sh.zip
     unzip acme.sh.zip
 }
 ss1() {
-    wget http://tmp.o1o.win/15oPMg/docker-compose.yml
+    wget http://tmp.o3o.top/15oPMg/docker-compose.yml
     docker-compose up -d
 }
 ss1_4_40_1() {
-    wget http://tmp.o1o.win/sXZqR/docker-compose.yml
+    wget http://tmp.o3o.top/sXZqR/docker-compose.yml
     docker-compose up -d
 }
 ss2() {
-    wget http://tmp.o1o.win/13sc8i/docker-compose.yml
+    wget http://tmp.o3o.top/13sc8i/docker-compose.yml
     docker-compose up -d
 }
 ss3() {
-    wget http://tmp.o1o.win/NRkZb/docker-compose.yml
+    wget http://tmp.o3o.top/NRkZb/docker-compose.yml
     docker-compose up -d
 }
 install_oh_my_zsh() {
