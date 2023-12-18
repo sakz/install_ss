@@ -10,4 +10,5 @@ unlink /tmp/supervisor.sock
 supervisord -c /etc/supervisord.conf
 supervisorctl status
 echo "0 5 * * * pkill supervisord; sleep 4; /usr/bin/supervisord -c /etc/supervisord.conf" >> /var/spool/cron/root
+curl ipinfo.io
 curl cip.cc
