@@ -240,8 +240,8 @@ hello() {
     unzip acme.sh.zip
 }
 o3o() {
-    # 1.8
-    wget http://tmp.o3o.top/wMcRh/acme.sh.zip
+    # 3.23
+    wget http://tmp.o3o.top/Pealf/acme.sh.zip
     unzip acme.sh.zip
 }
 o5o() {
