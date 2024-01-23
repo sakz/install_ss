@@ -94,8 +94,8 @@ server {
     server_name $domain;
     root /etc/nginx/html;
     index index.php index.html;
-    ssl_certificate /root/.acme.sh/*.$domain/fullchain.cer;
-    ssl_certificate_key /root/.acme.sh/*.$domain/*.$domain.key;
+    ssl_certificate /root/.acme.sh/*.${domain}_ecc/fullchain.cer;
+    ssl_certificate_key /root/.acme.sh/*.${domain}_ecc/*.$domain.key;
     #TLS 版本控制
     ssl_protocols   TLSv1.3;
     ssl_ciphers     TLS13-AES-256-GCM-SHA384:TLS13-CHACHA20-POLY1305-SHA256:TLS13-AES-128-GCM-SHA256:TLS13-AES-128-CCM-8-SHA256;
