@@ -375,7 +375,7 @@ do
         ;;
         19)
             timedatectl set-timezone Asia/Shanghai
-            add_keys
+            # add_keys
             yum install -y vim tmux
             install_vnstat_iftop
             install_ss
