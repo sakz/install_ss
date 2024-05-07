@@ -97,6 +97,7 @@
                     "domain":[
                         "domain:openai.com",
                         "domain:ai.com",
+                        "domain:chatgpt.com",
                         "domain:ipinfo.io"
                     ],
                     "outboundTag":"chatgpt"
