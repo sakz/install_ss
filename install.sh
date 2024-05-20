@@ -39,7 +39,8 @@ install_ss(){
     yum install -y m2crypto git
     yum install -y unzip
     yum install -y python-pip
-    pip install cymysql==0.9.4
+    # pip install cymysql==0.9.4
+    pip install cymysql==0.9.4 -i https://mirrors.aliyun.com/pypi/simple/
 }
 install_ss1(){
     rm -rf SS1.zip
