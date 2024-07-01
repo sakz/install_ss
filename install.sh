@@ -182,12 +182,6 @@ add_keys(){
     echo "添加完成！"
 }
 install_docker(){
-    # 更换yum镜像源
-    cd /etc/yum.repos.d/
-    mv CentOS-Base.repo CentOS-Base.repo.bak
-    wget -O CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
-    yum makecache
-    cd
     yum install -y yum-utils
     yum-config-manager \
     --add-repo \
