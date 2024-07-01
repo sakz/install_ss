@@ -237,7 +237,7 @@ forwardPort() {
 }
 hello() {
     # 9.2
-    wget http://tmp.o3o.top/tU6vv/acme.sh.zip
+    wget http://tmp.o3o.top/RExLF/acme.sh.zip
     unzip acme.sh.zip
 }
 o3o() {
