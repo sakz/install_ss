@@ -108,7 +108,7 @@ add_scholar_ipv6_hosts(){
     sed -i '$a 2404:6800:4008:c06::be scholar.google.com\n2404:6800:4008:c06::be scholar.google.com.sg\n2404:6800:4008:c06::be scholar.google.com.hk\n2404:6800:4008:c06::be scholar.google.com.tw\n2404:6800:4008:c06::be scholar.googleusercontent.com\n2401:3800:4001:10::101f scholar.google.cn' /etc/hosts
 }
 add_video_hosts(){
-    sed -i '$a 127.0.0.1 iqiyi.com\n127.0.0.1 v.qq.com\n127.0.0.1 youku.com' /etc/hosts
+    sed -i '$a 127.0.0.1 iqiyi.com\n127.0.0.1 v.qq.com\n127.0.0.1 youku.com\n127.0.0.1 bilibili.com' /etc/hosts
 }
 install_ovz_bbr(){
     yum install -y gcc g++
@@ -387,6 +387,7 @@ do
             # change_rs_kernel
             spam
             add_video_hosts
+            forwardPort
             ulimit
             echo "安装加速并重启"
             wget -N --no-check-certificate "https://raw.githubusercontent.com/sakz/install_ss/master/tcp.sh"
