@@ -314,6 +314,7 @@ do
     echo '36: forwardPort'
     echo '37: o5o-acme'
     echo '38: o5o-docker'
+    echo '39: 初始化xrayr环境'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
     case $choice in
@@ -453,6 +454,26 @@ do
         ;;
         38)
             ss1_4_40_1
+        ;;
+        39)
+            timedatectl set-timezone Asia/Shanghai
+            add_keys
+            # yum install -y vim tmux
+            install_vnstat_iftop
+            # install_ss
+            # add_scholar_ipv6_hosts
+            # install_docker
+            addTmpCli
+            updateCa
+            # change_rs_kernel
+            spam
+            add_video_hosts
+            # forwardPort
+            ulimit
+            echo "安装加速并重启"
+            wget -N --no-check-certificate "https://raw.githubusercontent.com/sakz/install_ss/master/tcp.sh"
+            chmod +x tcp.sh
+            ./tcp.sh
         ;;
         *)
             echo '退出脚本！'
