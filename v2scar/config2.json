@@ -76,6 +76,10 @@
             "settings": {}
         },
         {
+            "protocol": "blackhole",
+            "tag": "block"
+        },
+        {
             "tag": "chatgpt",
             "protocol": "socks",
             "settings": {
@@ -101,6 +105,23 @@
                         "domain:ipinfo.io"
                     ],
                     "outboundTag":"chatgpt"
+                },
+                {
+                    "type": "field",
+                    "outboundTag": "block",
+                    "protocol": [
+                        "bittorrent"
+                    ]
+                },
+                {
+                    "type": "field",
+                    "outboundTag": "block",
+                    "domain":[
+                        "domain:iqiyi.com",
+                        "domain:v.qq.com",
+                        "domain:youku.com",
+                        "domain:bilibili.com"
+                    ]
                 },
                 {
                     "inboundTag": [
