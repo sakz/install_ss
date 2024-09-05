@@ -80,6 +80,10 @@
             "tag": "block"
         },
         {
+            "protocol": "blackhole",
+            "tag": "block"
+        },
+        {
             "tag": "chatgpt",
             "protocol": "socks",
             "settings": {
@@ -121,6 +125,13 @@
                         "domain:v.qq.com",
                         "domain:youku.com",
                         "domain:bilibili.com"
+                    ]
+                },
+                {
+                    "type": "field",
+                    "outboundTag": "block",
+                    "protocol": [
+                        "bittorrent"
                     ]
                 },
                 {
