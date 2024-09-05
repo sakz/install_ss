@@ -103,6 +103,16 @@
                     "outboundTag":"chatgpt"
                 },
                 {
+                    "type": "field",
+                    "outboundTag": "block",
+                    "domain":[
+                        "domain:iqiyi.com",
+                        "domain:v.qq.com",
+                        "domain:youku.com",
+                        "domain:bilibili.com"
+                    ]
+                },
+                {
                     "inboundTag": [
                         "api"
                     ],
