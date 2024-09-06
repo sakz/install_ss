@@ -236,18 +236,18 @@ forwardPort() {
     service iptables save
 }
 hello() {
-    # 9.26
-    wget http://tmp.o3o.top/idFev/acme.sh.zip
+    # 12.6
+    wget http://tmp.o3o.top/ng2y5/acme.sh.zip
     unzip acme.sh.zip
 }
 o3o() {
-    # 9.16
-    wget http://tmp.o3o.top/tUc8v/acme.sh.zip
+    # 12.6
+    wget http://tmp.o3o.top/iKxok/acme.sh.zip
     unzip acme.sh.zip
 }
 o5o() {
-    # 9.21
-    wget http://tmp.o3o.top/cB4PN/acme.sh.zip
+    # 12.6
+    wget http://tmp.o3o.top/ng2y5/acme.sh.zip
     unzip acme.sh.zip
 }
 ss1() {
