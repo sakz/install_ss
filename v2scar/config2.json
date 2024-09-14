@@ -80,10 +80,6 @@
             "tag": "block"
         },
         {
-            "protocol": "blackhole",
-            "tag": "block"
-        },
-        {
             "tag": "chatgpt",
             "protocol": "socks",
             "settings": {
@@ -109,13 +105,6 @@
                         "domain:ipinfo.io"
                     ],
                     "outboundTag":"chatgpt"
-                },
-                {
-                    "type": "field",
-                    "outboundTag": "block",
-                    "protocol": [
-                        "bittorrent"
-                    ]
                 },
                 {
                     "type": "field",
