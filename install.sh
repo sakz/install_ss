@@ -208,6 +208,7 @@ install_docker_debian(){
     apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
     systemctl start docker
     systemctl enable docker
+    apt install docker-compose -y
 }
 install_v2ray_tls(){
     wget ${baseUrl}v2ray_ws_tls1.3.sh
@@ -223,6 +224,11 @@ install_v2ray_tls_v3(){
     wget ${baseUrl}v2ray_ws_tls1.3_ver3.sh
     chmod +x v2ray_ws_tls1.3_ver3.sh
     ./v2ray_ws_tls1.3_ver3.sh
+}
+install_v2ray_tls_v3_debian(){
+    wget ${baseUrl}v2ray_ws_tls1.3_ver3_debian.sh
+    chmod +x v2ray_ws_tls1.3_ver3_debian.sh
+    ./v2ray_ws_tls1.3_ver3_debian.sh
 }
 addCron() {
     wget ${baseUrl}addCron.sh
@@ -437,7 +443,18 @@ do
             install_v2ray_tls
         ;;
         28)
-            install_v2ray_tls_v3
+            if [ -f /etc/redhat-release ]; then
+                # 检测到 CentOS
+                echo 'CentOS'
+                install_v2ray_tls_v3
+            elif [ -f /etc/debian_version ]; then
+                # 检测到 Debian 或其衍生版本
+                echo 'debian'
+                install_v2ray_tls_v3_debian
+            else
+                # 未知的 Linux 发行版
+                echo "Unknown OS"
+            fi
         ;;
         29)
             addCron
@@ -495,7 +512,7 @@ do
         40)
             timedatectl set-timezone Asia/Shanghai
             add_keys
-            apt install vim tmux -y
+            apt install vim tmux unzip -y
             install_vnstat_iftop_debian
             # install_ss
             # add_scholar_ipv6_hosts
