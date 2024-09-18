@@ -32,6 +32,12 @@ install_vnstat_iftop(){
     chown -R vnstat:vnstat /var/lib/vnstat/ # 设置vnstat数据库目录的所有者为vnstat用户
     systemctl restart vnstat.service # 重启vnstat
 }
+install_vnstat_iftop_debian(){
+    apt install vnstat iftop -y
+    vnstat -i eth0
+    systemctl restart vnstat
+    systemctl status vnstat
+}
 install_ss(){
     # yum install -y python-setuptools && easy_install pip
     yum install epel-release -y
@@ -193,6 +199,16 @@ install_docker(){
     ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
     systemctl enable docker
 }
+install_docker_debian(){
+    apt install ca-certificates curl gnupg lsb-release -y
+    mkdir -m 0755 -p /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+    apt update 
+    apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+    systemctl start docker
+    systemctl enable docker
+}
 install_v2ray_tls(){
     wget ${baseUrl}v2ray_ws_tls1.3.sh
     chmod +x v2ray_ws_tls1.3.sh
@@ -315,6 +331,7 @@ do
     echo '37: o5o-acme'
     echo '38: o5o-docker'
     echo '39: 初始化xrayr环境'
+    echo '40: 初始化debian11环境'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
     case $choice in
@@ -468,6 +485,26 @@ do
             # change_rs_kernel
             spam
             add_video_hosts
+            # forwardPort
+            ulimit
+            echo "安装加速并重启"
+            wget -N --no-check-certificate "https://raw.githubusercontent.com/sakz/install_ss/master/tcp.sh"
+            chmod +x tcp.sh
+            ./tcp.sh
+        ;;
+        40)
+            timedatectl set-timezone Asia/Shanghai
+            add_keys
+            apt install vim tmux -y
+            install_vnstat_iftop_debian
+            # install_ss
+            # add_scholar_ipv6_hosts
+            install_docker_debian
+            addTmpCli
+            # updateCa
+            # change_rs_kernel
+            # spam
+            # add_video_hosts
             # forwardPort
             ulimit
             echo "安装加速并重启"
