@@ -281,7 +281,7 @@ ss1_4_40_1() {
     docker-compose up -d
 }
 ss2() {
-    wget http://tmp.o3o.top/13sc8i/docker-compose.yml
+    wget http://tmp.o3o.top/LKppc/docker-compose.yml
     docker-compose up -d
 }
 ss3() {
