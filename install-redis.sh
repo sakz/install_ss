@@ -5,19 +5,19 @@ tar xvzf redis-${version}.tar.gz
 cd redis-${version}
 make
 
-sudo cp src/redis-server /usr/local/bin/
-sudo cp src/redis-cli /usr/local/bin/
+cp src/redis-server /usr/local/bin/
+cp src/redis-cli /usr/local/bin/
 
-#sudo make install
+#make install
 
-sudo mkdir /etc/redis
-sudo mkdir /var/redis
+mkdir /etc/redis
+mkdir /var/redis
 
-sudo cp utils/redis_init_script /etc/init.d/redis_6379
+cp utils/redis_init_script /etc/init.d/redis_6379
 
-sudo cp redis.conf /etc/redis/6379.conf
+cp redis.conf /etc/redis/6379.conf
 
-sudo mkdir /var/redis/6379
+mkdir /var/redis/6379
 
 echo "按下面提示编辑这个文件 /etc/redis/6379.conf"
 echo 'Set daemonize to yes'
