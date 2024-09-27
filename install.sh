@@ -285,7 +285,7 @@ ss2() {
     docker-compose up -d
 }
 ss3() {
-    wget http://tmp.o3o.top/NRkZb/docker-compose.yml
+    wget http://tmp.o3o.top/YVNhy/docker-compose.yml
     docker-compose up -d
 }
 install_oh_my_zsh() {
