@@ -336,8 +336,9 @@ do
     echo '36: forwardPort'
     echo '37: o5o-acme'
     echo '38: o5o-docker'
-    echo '39: 初始化xrayr环境'
-    echo '40: 初始化debian11环境'
+    echo '39: 初始化centos7环境xrayr'
+    echo '40: 初始化debian11环境v2scar xrayr'
+    echo '41: 初始化debian11环境v2bx'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
     case $choice in
@@ -492,17 +493,10 @@ do
         39)
             timedatectl set-timezone Asia/Shanghai
             add_keys
-            # yum install -y vim tmux
+            yum install -y vim tmux
             install_vnstat_iftop
-            # install_ss
-            # add_scholar_ipv6_hosts
-            # install_docker
             addTmpCli
             updateCa
-            # change_rs_kernel
-            spam
-            add_video_hosts
-            # forwardPort
             ulimit
             echo "安装加速并重启"
             wget -N --no-check-certificate "https://raw.githubusercontent.com/sakz/install_ss/master/tcp.sh"
@@ -512,22 +506,29 @@ do
         40)
             timedatectl set-timezone Asia/Shanghai
             add_keys
-            apt install vim tmux unzip -y
+            apt update
+            apt install vim tmux unzip zip -y
             install_vnstat_iftop_debian
-            # install_ss
-            # add_scholar_ipv6_hosts
             install_docker_debian
             addTmpCli
-            # updateCa
-            # change_rs_kernel
-            # spam
-            # add_video_hosts
             # forwardPort
             ulimit
             echo "安装加速并重启"
             wget -N --no-check-certificate "https://raw.githubusercontent.com/sakz/install_ss/master/tcp.sh"
             chmod +x tcp.sh
             ./tcp.sh
+        ;;
+        41)
+            timedatectl set-timezone Asia/Shanghai
+            add_keys
+            apt update
+            apt install vim tmux unzip zip -y
+            install_vnstat_iftop_debian
+            install_docker_debian
+            addTmpCli
+            # forwardPort
+            ulimit
+            echo "可以安装v2bx了"
         ;;
         *)
             echo '退出脚本！'
