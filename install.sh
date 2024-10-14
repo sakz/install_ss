@@ -70,7 +70,7 @@ spam(){
 speedtest(){
     wget -O speedtest-cli https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py
     chmod +x speedtest-cli
-    ./speedtest-cli
+    python3 speedtest-cli
 }
 supervisord(){
     wget ${baseUrl}supervisor.sh  && bash supervisor.sh
