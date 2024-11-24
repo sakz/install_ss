@@ -273,7 +273,7 @@ o5o() {
     unzip acme.sh.zip
 }
 ss1() {
-    wget http://tmp.o3o.top/15oPMg/docker-compose.yml
+    wget http://tmp.o3o.top/tBV43/docker-compose.yml
     docker-compose up -d
 }
 ss1_4_40_1() {
