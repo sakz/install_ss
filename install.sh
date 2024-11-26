@@ -293,6 +293,14 @@ install_oh_my_zsh() {
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 }
+open_bbr() {
+    echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
+    echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf
+    sysctl -p
+    sysctl net.ipv4.tcp_available_congestion_control
+    lsmod | grep bbr
+    echo "BBR启动成功！"
+}
 while :
 do
     echo "部署后端脚本："
@@ -339,6 +347,7 @@ do
     echo '39: 初始化centos7环境xrayr'
     echo '40: 初始化debian11环境v2scar xrayr'
     echo '41: 初始化debian11环境v2bx'
+    echo '42: 一键开启ubuntu和debian的bbr'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
     case $choice in
@@ -529,6 +538,9 @@ do
             # forwardPort
             ulimit
             echo "可以安装v2bx了"
+        ;;
+        42)
+            open_bbr
         ;;
         *)
             echo '退出脚本！'
