@@ -4,13 +4,13 @@ baseUrl=https://raw.githubusercontent.com/sakz/install_ss/master/
 
 # 检查系统
 if [ ! -f /etc/debian_version ]; then
-    echo "仅支持Debian 11"
+    echo "仅支持Debian"
     exit
 fi
-if [ "$(cat /etc/debian_version | cut -d'.' -f1)" -ne "11" ]; then
-    echo "仅支持Debian 11"
-    exit
-fi
+# if [ "$(cat /etc/debian_version | cut -d'.' -f1)" -ne "11" ]; then
+#     echo "仅支持Debian 11"
+#     exit
+# fi
 
 function blue(){
     echo -e "\033[34m\033[01m $1 \033[0m"
