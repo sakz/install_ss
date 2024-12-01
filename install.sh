@@ -313,6 +313,17 @@ install_node_pm2() {
     npm -v # 应该打印 `10.9.0`
     npm i -g pm2
 }
+add_swap() {
+    dd if=/dev/zero of=/swapfile bs=1M count=2048
+    # Set correct permissions
+    chmod 600 /swapfile
+    # Setup swap
+    mkswap /swapfile
+    # Enable swap
+    swapon /swapfile
+    #To make it permanent, add this line to /etc/fstab:
+    echo '/swapfile none swap sw 0 0' >> /etc/fstab
+}
 while :
 do
     echo "部署后端脚本："
@@ -358,6 +369,7 @@ do
     echo '38: o5o-docker'
     echo '39: 初始化centos7环境xrayr'
     echo '40: 初始化debian和ubuntu环境'
+    echo '41: 添加2G交换分区'
     echo '42: 一键开启ubuntu和debian的bbr'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
@@ -547,6 +559,9 @@ do
             ulimit
             open_bbr
             echo "初始化完毕！"
+        ;;
+        41)
+            add_swap
         ;;
         42)
             open_bbr
