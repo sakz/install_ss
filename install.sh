@@ -159,7 +159,7 @@ install_bbr(){
 install_axel(){
     wget ${baseUrl}axel-2.4-1.el6.rf.x86_64.rpm  && rpm -ivh axel-2.4-1.el6.rf.x86_64.rpm
 }
-install_node(){
+install_node_centos(){
     # curl --silent --location https://rpm.nodesource.com/setup_16.x | sudo bash -
     # yum install -y nodejs
     yum install https://rpm.nodesource.com/pub_16.x/nodistro/repo/nodesource-release-nodistro-1.noarch.rpm -y
@@ -301,6 +301,18 @@ open_bbr() {
     lsmod | grep bbr
     echo "BBR启动成功！"
 }
+install_node_pm2() {
+    # 安装 nvm (Node 版本管理器)
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
+    source .bashrc
+    # 下载并安装 Node.js（可能需要重启终端）
+    nvm install 22
+    # 验证环境中是否存在正确的 Node.js 版本
+    node -v # 应该打印 `v22.11.0`
+    # 验证环境中是否存在正确的 npm 版本
+    npm -v # 应该打印 `10.9.0`
+    npm i -g pm2
+}
 while :
 do
     echo "部署后端脚本："
@@ -345,8 +357,7 @@ do
     echo '37: o5o-acme'
     echo '38: o5o-docker'
     echo '39: 初始化centos7环境xrayr'
-    echo '40: 初始化debian11环境v2scar xrayr'
-    echo '41: 初始化debian11环境v2bx'
+    echo '40: 初始化debian和ubuntu环境'
     echo '42: 一键开启ubuntu和debian的bbr'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
@@ -435,7 +446,18 @@ do
             install_axel
         ;;
         22)
-            install_node
+            if [ -f /etc/redhat-release ]; then
+                # 检测到 CentOS
+                echo 'CentOS'
+                install_node_centos
+            elif [ -f /etc/debian_version ]; then
+                # 检测到 Debian 或其衍生版本ubuntu
+                echo 'debian'
+                install_node_pm2
+            else
+                # 未知的 Linux 发行版
+                echo "Unknown OS"
+            fi
         ;;
         23)
             install_redis
@@ -458,7 +480,7 @@ do
                 echo 'CentOS'
                 install_v2ray_tls_v3
             elif [ -f /etc/debian_version ]; then
-                # 检测到 Debian 或其衍生版本
+                # 检测到 Debian 或其衍生版本ubuntu
                 echo 'debian'
                 install_v2ray_tls_v3_debian
             else
@@ -519,25 +541,12 @@ do
             apt install vim tmux unzip zip -y
             install_vnstat_iftop_debian
             install_docker_debian
+            install_node_pm2
             addTmpCli
             # forwardPort
             ulimit
-            echo "安装加速并重启"
-            wget -N --no-check-certificate "https://raw.githubusercontent.com/sakz/install_ss/master/tcp.sh"
-            chmod +x tcp.sh
-            ./tcp.sh
-        ;;
-        41)
-            timedatectl set-timezone Asia/Shanghai
-            add_keys
-            apt update
-            apt install vim tmux unzip zip -y
-            install_vnstat_iftop_debian
-            install_docker_debian
-            addTmpCli
-            # forwardPort
-            ulimit
-            echo "可以安装v2bx了"
+            open_bbr
+            echo "初始化完毕！"
         ;;
         42)
             open_bbr
