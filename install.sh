@@ -258,18 +258,18 @@ forwardPort() {
     service iptables save
 }
 hello() {
-    # 12.6
-    wget http://tmp.o3o.top/ng2y5/acme.sh.zip
+    # 2024.3.3到期
+    wget http://tmp.o3o.top/GIPlS/acme.sh.zip
     unzip acme.sh.zip
 }
 o3o() {
-    # 12.6
-    wget http://tmp.o3o.top/iKxok/acme.sh.zip
+    # 2024.3.3到期
+    wget http://tmp.o3o.top/GIPlS/acme.sh.zip
     unzip acme.sh.zip
 }
 o5o() {
-    # 12.6
-    wget http://tmp.o3o.top/ng2y5/acme.sh.zip
+    # 2024.3.3到期
+    wget http://tmp.o3o.top/GIPlS/acme.sh.zip
     unzip acme.sh.zip
 }
 ss1() {
