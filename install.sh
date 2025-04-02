@@ -258,8 +258,8 @@ forwardPort() {
     service iptables save
 }
 hello() {
-    # 2024.3.3到期
-    wget http://tmp.o3o.top/GIPlS/acme.sh.zip
+    # 2025.6.9到期
+    wget http://tmp.o3o.top/vqV9C/acme.sh.zip
     unzip acme.sh.zip
 }
 o3o() {
