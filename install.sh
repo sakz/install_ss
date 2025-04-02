@@ -263,8 +263,8 @@ hello() {
     unzip acme.sh.zip
 }
 o3o() {
-    # 2024.3.3到期
-    wget http://tmp.o3o.top/GIPlS/acme.sh.zip
+    # 2025.6.30到期
+    wget http://tmp.o3o.top/AFlqP/acme.sh.zip
     unzip acme.sh.zip
 }
 o5o() {
