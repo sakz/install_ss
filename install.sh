@@ -210,11 +210,6 @@ install_docker_debian(){
     systemctl enable docker
     apt install docker-compose -y
 }
-install_v2ray_tls(){
-    wget ${baseUrl}v2ray_ws_tls1.3.sh
-    chmod +x v2ray_ws_tls1.3.sh
-    ./v2ray_ws_tls1.3.sh
-}
 install_v2ray_tls_v2(){
     wget ${baseUrl}v2ray_ws_tls1.3_ver2.sh
     chmod +x v2ray_ws_tls1.3_ver2.sh
@@ -355,7 +350,6 @@ do
     echo '24: 安装iftop-centos7'
     echo '25: 添加keys'
     echo '26: 安装docker和docker-compose'
-    echo '27: 安装v2ray_tls'
     echo '28: 安装v2ray_tls_v3'
     echo '29: addCron'
     echo '30: addTmpCli'
@@ -482,9 +476,6 @@ do
         ;;
         26)
             install_docker
-        ;;
-        27)
-            install_v2ray_tls
         ;;
         28)
             if [ -f /etc/redhat-release ]; then
