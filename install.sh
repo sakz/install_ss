@@ -200,15 +200,32 @@ install_docker(){
     systemctl enable docker
 }
 install_docker_debian(){
-    apt install ca-certificates curl gnupg lsb-release -y
+    # 1. 安装基础依赖
+    apt update && apt install ca-certificates curl gnupg lsb-release -y
+    
+    # 2. 设置 Docker 官方密钥环 (采用更现代的权限管理)
     mkdir -m 0755 -p /etc/apt/keyrings
-    curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    # 如果文件已存在则静默覆盖
+    curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor --yes -o /etc/apt/keyrings/docker.gpg
+    
+    # 3. 添加官方源
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+    
+    # 4. 安装 Docker 核心组件及 V2 版 Compose 插件
     apt update 
     apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+    
+    # 5. 启动服务
     systemctl start docker
     systemctl enable docker
-    apt install docker-compose -y
+    
+    # 6. 【核心优化】创建软链接
+    # 这样你输入 docker-compose 时，实际上运行的是 docker compose (V2)
+    # 完美解决 Invalid interpolation 报错问题
+    ln -sf /usr/libexec/docker/cli-plugins/docker-compose /usr/local/bin/docker-compose
+    
+    echo "Docker 及 Docker Compose V2 安装完成！"
+    docker compose version
 }
 install_v2ray_tls_v2(){
     wget ${baseUrl}v2ray_ws_tls1.3_ver2.sh
