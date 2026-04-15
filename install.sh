@@ -315,10 +315,10 @@ open_bbr() {
 }
 install_node_pm2() {
     # 安装 nvm (Node 版本管理器)
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash
     source .bashrc
     # 下载并安装 Node.js（可能需要重启终端）
-    nvm install 22
+    nvm install 24
     # 验证环境中是否存在正确的 Node.js 版本
     node -v # 应该打印 `v22.11.0`
     # 验证环境中是否存在正确的 npm 版本
