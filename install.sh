@@ -305,6 +305,14 @@ install_oh_my_zsh() {
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 }
+install_oh_my_zsh_debian() {
+    apt install -y zsh
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+    sed -i 's/^ZSH_THEME=.*/ZSH_THEME="risto"/' ~/.zshrc
+    # 禁用 oh my zsh 自动更新提示
+    sed -i '/^source \$ZSH\/oh-my-zsh.sh/i DISABLE_AUTO_UPDATE="true"' ~/.zshrc
+    echo "oh my zsh 安装完成，默认主题已修改为 risto，已禁用自动更新"
+}
 open_bbr() {
     echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
     echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf
@@ -566,6 +574,8 @@ do
             # forwardPort
             ulimit
             open_bbr
+            install_oh_my_zsh_debian
+            add_swap
             echo "初始化完毕！"
         ;;
         41)
