@@ -298,7 +298,7 @@ install_panel_script() {
 apply_config() {
   local kind="$1"
   local url="$2"
-  local dir tmp_dir zip_path
+  local dir tmp_dir zip_path extract_dir source_dir entry_count first_entry
 
   require_root
   require_cmd unzip
@@ -306,16 +306,28 @@ apply_config() {
   dir="$(config_dir "$kind")"
   tmp_dir="$(mktemp -d)"
   zip_path="${tmp_dir}/config.zip"
+  extract_dir="${tmp_dir}/extracted"
 
   info "下载 $(service_name "$kind") 配置: $url"
   download_file "$url" "$zip_path"
 
+  info "解压配置到临时目录"
+  mkdir -p "$extract_dir"
+  unzip -q "$zip_path" -d "$extract_dir"
+
+  entry_count="$(find "$extract_dir" -mindepth 1 -maxdepth 1 ! -name "__MACOSX" | wc -l | tr -d " ")"
+  first_entry="$(find "$extract_dir" -mindepth 1 -maxdepth 1 ! -name "__MACOSX" -print -quit)"
+  source_dir="$extract_dir"
+  if [ "$entry_count" -eq 1 ] && [ -d "$first_entry" ]; then
+    source_dir="$first_entry"
+  fi
+
   info "删除旧配置目录: $dir"
   safe_remove_config_dir "$dir"
 
-  info "解压新配置到: $dir"
+  info "写入新配置到: $dir"
   mkdir -p "$dir"
-  unzip -q "$zip_path" -d "$dir"
+  cp -a "${source_dir}/." "$dir/"
 
   rm -rf "$tmp_dir"
   ok "$(service_name "$kind") 配置已覆盖"
