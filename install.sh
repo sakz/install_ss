@@ -263,11 +263,29 @@ updateCa() {
     update-ca-trust extract
 }
 forwardPort() {
-    iptables -t nat -A PREROUTING -p tcp --dport 81:100 -j REDIRECT --to-port 11233
-    iptables -t nat -A PREROUTING -p udp --dport 81:100 -j REDIRECT --to-port 11233
-    iptables -t nat -A PREROUTING -p tcp --dport 2000:3000 -j REDIRECT --to-port 11233
-    iptables -t nat -A PREROUTING -p udp --dport 2000:3000 -j REDIRECT --to-port 11233
-    service iptables save
+    local src_port="$1"
+    local dst_port="$2"
+
+    if [ -z "$src_port" ] || [ -z "$dst_port" ]; then
+        echo "用法: forwardPort <源端口或端口范围> <目标端口>"
+        echo "示例: forwardPort 80 11233"
+        echo "示例: forwardPort 81:100 11233"
+        return 1
+    fi
+
+    iptables -t nat -A PREROUTING -p tcp --dport "$src_port" -j REDIRECT --to-port "$dst_port"
+    iptables -t nat -A PREROUTING -p udp --dport "$src_port" -j REDIRECT --to-port "$dst_port"
+
+    if [ -f /etc/debian_version ]; then
+        if ! command -v iptables-save &>/dev/null; then
+            apt update && apt install -y iptables iptables-persistent
+        fi
+        iptables-save > /etc/iptables/rules.v4
+    elif [ -f /etc/redhat-release ]; then
+        service iptables save
+    else
+        echo "无法检测操作系统，iptables 规则未保存"
+    fi
 }
 hello() {
     # 2025.6.9到期
@@ -543,7 +561,9 @@ do
             ss3
         ;;
         36)
-            forwardPort
+            read -p "请输入源端口或端口范围（如 80 或 81:100）：" src_port
+            read -p "请输入目标端口：" dst_port
+            forwardPort "$src_port" "$dst_port"
         ;;
         37)
             o5o
