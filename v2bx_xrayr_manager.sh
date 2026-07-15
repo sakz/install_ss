@@ -298,7 +298,7 @@ install_panel_script() {
 apply_config() {
   local kind="$1"
   local url="$2"
-  local dir tmp_dir zip_path extract_dir source_dir entry_count first_entry
+  local dir tmp_dir zip_path extract_dir source_dir bundled_dir entry_count first_entry
 
   require_root
   require_cmd unzip
@@ -315,10 +315,15 @@ apply_config() {
   mkdir -p "$extract_dir"
   unzip -q "$zip_path" -d "$extract_dir"
 
-  entry_count="$(find "$extract_dir" -mindepth 1 -maxdepth 1 ! -name "__MACOSX" | wc -l | tr -d " ")"
-  first_entry="$(find "$extract_dir" -mindepth 1 -maxdepth 1 ! -name "__MACOSX" -print -quit)"
   source_dir="$extract_dir"
-  if [ "$entry_count" -eq 1 ] && [ -d "$first_entry" ]; then
+  bundled_dir="${extract_dir}/$(service_name "$kind")"
+  if [ -d "$bundled_dir" ]; then
+    source_dir="$bundled_dir"
+  else
+    entry_count="$(find "$extract_dir" -mindepth 1 -maxdepth 1 ! -name "__MACOSX" | wc -l | tr -d " ")"
+    first_entry="$(find "$extract_dir" -mindepth 1 -maxdepth 1 ! -name "__MACOSX" -print -quit)"
+  fi
+  if [ "$source_dir" = "$extract_dir" ] && [ "${entry_count:-0}" -eq 1 ] && [ -d "${first_entry:-}" ]; then
     source_dir="$first_entry"
   fi
 
