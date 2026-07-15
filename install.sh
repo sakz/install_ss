@@ -325,6 +325,11 @@ install_oh_my_zsh() {
 }
 install_oh_my_zsh_debian() {
     apt install -y zsh
+    local zsh_path
+    zsh_path="$(command -v zsh)"
+    if [ "$(getent passwd "$(id -un)" | cut -d: -f7)" != "$zsh_path" ]; then
+        chsh -s "$zsh_path"
+    fi
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
     sed -i 's/^ZSH_THEME=.*/ZSH_THEME="risto"/' ~/.zshrc
     # 禁用 oh my zsh 自动更新提示
@@ -332,7 +337,7 @@ install_oh_my_zsh_debian() {
     # 安装 zsh-autosuggestions 插件
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
     sed -i 's/^plugins=(/plugins=(zsh-autosuggestions /' ~/.zshrc
-    echo "oh my zsh 安装完成，默认主题已修改为 risto，已禁用自动更新，已安装 zsh-autosuggestions 插件"
+    echo "oh my zsh 安装完成，已设为默认 shell（重新登录后生效），默认主题已修改为 risto，已禁用自动更新，已安装 zsh-autosuggestions 插件"
 }
 open_bbr() {
     echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
