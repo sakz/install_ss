@@ -594,7 +594,7 @@ do
             timedatectl set-timezone Asia/Shanghai
             add_keys
             apt update
-            apt install vim tmux unzip zip iptables-persistent -y
+            apt install vim tmux unzip zip git iptables-persistent -y
             install_vnstat_iftop_debian
             install_docker_debian
             install_node_pm2
