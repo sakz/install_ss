@@ -323,6 +323,26 @@ install_oh_my_zsh() {
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 }
+install_chinese_locale_debian() {
+    apt install -y locales
+    sed -i 's/^# *zh_CN.UTF-8 UTF-8$/zh_CN.UTF-8 UTF-8/' /etc/locale.gen
+    if ! grep -Eq '^zh_CN\.UTF-8[[:space:]]+UTF-8$' /etc/locale.gen; then
+        echo 'zh_CN.UTF-8 UTF-8' >> /etc/locale.gen
+    fi
+    locale-gen
+    if ! locale -a | grep -qi '^zh_CN\.utf8$'; then
+        echo "中文 UTF-8 环境生成失败"
+        return 1
+    fi
+    if ! update-locale LANG=zh_CN.UTF-8 LANGUAGE=zh_CN:zh; then
+        echo "中文 UTF-8 默认环境设置失败"
+        return 1
+    fi
+    export LANG=zh_CN.UTF-8
+    export LANGUAGE=zh_CN:zh
+    export LC_ALL=zh_CN.UTF-8
+    echo "中文 UTF-8 环境配置完成（重新登录后完全生效）"
+}
 install_oh_my_zsh_debian() {
     apt install -y zsh
     local zsh_path
@@ -594,6 +614,7 @@ do
             timedatectl set-timezone Asia/Shanghai
             add_keys
             apt update
+            install_chinese_locale_debian || continue
             apt install vim tmux unzip zip git iptables-persistent -y
             install_vnstat_iftop_debian
             install_docker_debian
