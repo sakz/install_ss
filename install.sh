@@ -38,6 +38,31 @@ install_vnstat_iftop_debian(){
     systemctl restart vnstat
     systemctl status vnstat
 }
+install_fail2ban_debian(){
+    apt install fail2ban -y
+    systemctl enable --now fail2ban
+}
+install_block_mail_debian(){
+    local script_path="/tmp/block-mail.sh"
+    wget -O "$script_path" "${baseUrl}block-mail.sh"
+    chmod +x "$script_path"
+    "$script_path"
+}
+configure_dns_debian(){
+    if systemctl is-active --quiet systemd-resolved 2>/dev/null; then
+        mkdir -p /etc/systemd/resolved.conf.d
+        printf '%s\n' \
+            '[Resolve]' \
+            'DNS=8.8.8.8 1.1.1.1' \
+            'Domains=~.' > /etc/systemd/resolved.conf.d/99-custom-dns.conf
+        systemctl restart systemd-resolved
+    else
+        printf '%s\n' \
+            'nameserver 8.8.8.8' \
+            'nameserver 1.1.1.1' > /etc/resolv.conf
+    fi
+    echo "默认 DNS 已设置为 8.8.8.8 和 1.1.1.1"
+}
 install_ss(){
     # yum install -y python-setuptools && easy_install pip
     yum install epel-release -y
@@ -200,16 +225,28 @@ install_docker(){
     systemctl enable docker
 }
 install_docker_debian(){
+    local docker_dist
+    . /etc/os-release
+    case "$ID" in
+        debian|ubuntu)
+            docker_dist="$ID"
+        ;;
+        *)
+            echo "不支持的系统：$ID"
+            return 1
+        ;;
+    esac
+
     # 1. 安装基础依赖
     apt update && apt install ca-certificates curl gnupg lsb-release -y
     
     # 2. 设置 Docker 官方密钥环 (采用更现代的权限管理)
     mkdir -m 0755 -p /etc/apt/keyrings
     # 如果文件已存在则静默覆盖
-    curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor --yes -o /etc/apt/keyrings/docker.gpg
+    curl -fsSL "https://download.docker.com/linux/${docker_dist}/gpg" | gpg --dearmor --yes -o /etc/apt/keyrings/docker.gpg
     
     # 3. 添加官方源
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/${docker_dist} $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
     
     # 4. 安装 Docker 核心组件及 V2 版 Compose 插件
     apt update 
@@ -615,9 +652,12 @@ do
             add_keys
             apt update
             install_chinese_locale_debian || continue
+            configure_dns_debian || continue
             apt install vim tmux unzip zip git iptables-persistent -y
             install_vnstat_iftop_debian
+            install_fail2ban_debian || continue
             install_docker_debian
+            install_block_mail_debian || continue
             install_node_pm2
             addTmpCli
             # forwardPort
