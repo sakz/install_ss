@@ -380,6 +380,21 @@ install_chinese_locale_debian() {
     export LC_ALL=zh_CN.UTF-8
     echo "中文 UTF-8 环境配置完成（重新登录后完全生效）"
 }
+install_speedtest_ookla() {
+    if [ -f /etc/debian_version ]; then
+        echo "检测到 Debian/Ubuntu 系统，开始安装 Ookla 官方 speedtest"
+        apt-get install curl -y
+        curl -s "https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh" | bash
+        apt-get install speedtest -y
+        echo "Ookla speedtest 安装完成！"
+        echo "运行 'speedtest' 即可测速"
+        echo "香港节点测试命令：speedtest -s 1536"
+    elif [ -f /etc/redhat-release ]; then
+        echo "CentOS 系统请手动安装，参考官方文档：https://www.speedtest.net/apps/cli"
+    else
+        echo "不支持的操作系统"
+    fi
+}
 install_oh_my_zsh_debian() {
     apt install -y zsh
     local zsh_path
@@ -473,6 +488,7 @@ do
     echo '40: 初始化debian和ubuntu环境'
     echo '41: 添加2G交换分区'
     echo '42: 一键开启ubuntu和debian的bbr'
+    echo '43: 安装Ookla官方speedtest'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
     case $choice in
@@ -672,6 +688,9 @@ do
         ;;
         42)
             open_bbr
+        ;;
+        43)
+            install_speedtest_ookla
         ;;
         *)
             echo '退出脚本！'
