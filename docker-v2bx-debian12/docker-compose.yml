@@ -1,0 +1,12 @@
+services:
+  v2bx:
+    image: ${V2BX_IMAGE:-v2bx-debian12:local}
+    build:
+      context: .
+      args:
+        V2BX_VERSION: ${V2BX_VERSION:?请在 .env 中设置 V2BX_VERSION}
+    platform: linux/amd64
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      V2BX_CONFIG_URL: ${V2BX_CONFIG_URL:?请在 .env 中设置 V2BX_CONFIG_URL}

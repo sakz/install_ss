@@ -1,0 +1,50 @@
+name: Publish V2bX image to GHCR
+
+on:
+  workflow_dispatch:
+    inputs:
+      v2bx_version:
+        description: V2bX Release tag (for example v2.1.2)
+        required: true
+        type: string
+      image_tag:
+        description: GHCR image tag
+        required: true
+        default: latest
+        type: string
+  push:
+    tags:
+      - 'v2bx-*'
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Resolve V2bX version and image tag
+        id: metadata
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "v2bx_version=${{ inputs.v2bx_version }}" >> "$GITHUB_OUTPUT"
+            echo "image_tag=${{ inputs.image_tag }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "v2bx_version=${GITHUB_REF_NAME#v2bx-}" >> "$GITHUB_OUTPUT"
+            echo "image_tag=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          platforms: linux/amd64
+          build-args: V2BX_VERSION=${{ steps.metadata.outputs.v2bx_version }}
+          tags: ghcr.io/${{ github.repository_owner }}/v2bx-debian12:${{ steps.metadata.outputs.image_tag }}
