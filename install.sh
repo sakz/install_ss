@@ -442,6 +442,25 @@ add_swap() {
     #To make it permanent, add this line to /etc/fstab:
     echo '/swapfile none swap sw 0 0' >> /etc/fstab
 }
+install_pfmgr(){
+    # pfmgr - nftables TCP/UDP 端口转发管理器
+    # 支持 DNAT + MASQUERADE，FORWARD/Docker 兼容
+    wget -N --no-check-certificate ${baseUrl}pfmgr-v2.1.0.sh
+    chmod +x pfmgr-v2.1.0.sh
+    ./pfmgr-v2.1.0.sh install
+    echo
+    echo "pfmgr 已安装到 /usr/local/sbin/pfmgr"
+    echo "常用命令："
+    echo "  pfmgr add 443 1.2.3.4        # 添加端口转发（TCP+UDP）"
+    echo "  pfmgr add 8443 1.2.3.4 443   # 自定义目标端口"
+    echo "  pfmgr list                   # 查看所有规则"
+    echo "  pfmgr stats                  # 查看每个端口双向流量"
+    echo "  pfmgr update 443 5.6.7.8     # 修改目标地址"
+    echo "  pfmgr delete 443             # 删除转发"
+    echo "  pfmgr show                   # 查看实际 nftables 规则"
+    echo "  pfmgr apply                  # 重新加载配置"
+    echo "  pfmgr clear                  # 清空全部转发"
+}
 while :
 do
     echo "部署后端脚本："
@@ -489,6 +508,7 @@ do
     echo '41: 添加2G交换分区'
     echo '42: 一键开启ubuntu和debian的bbr'
     echo '43: 安装Ookla官方speedtest'
+    echo '44: 安装pfmgr端口转发管理器'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
     case $choice in
@@ -691,6 +711,9 @@ do
         ;;
         43)
             install_speedtest_ookla
+        ;;
+        44)
+            install_pfmgr
         ;;
         *)
             echo '退出脚本！'
