@@ -673,13 +673,13 @@ do
             install_vnstat_iftop_debian
             install_fail2ban_debian || continue
             install_docker_debian
+            install_oh_my_zsh_debian
             install_block_mail_debian || continue
             install_node_pm2
             addTmpCli
             # forwardPort
             ulimit
             open_bbr
-            install_oh_my_zsh_debian
             add_swap
             echo "初始化完毕！"
         ;;
