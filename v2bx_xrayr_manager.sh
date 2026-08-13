@@ -2,8 +2,8 @@
 
 set -euo pipefail
 
-V2BX_INSTALL_URL="https://raw.githubusercontent.com/wyx2685/V2bX-script/master/install.sh"
-XRAYR_INSTALL_URL="https://raw.githubusercontent.com/leaderen/wyx2685-XrayR-scripts/refs/heads/master/install.sh"
+V2BX_INSTALL_URL="https://raw.githubusercontent.com/sakz/V2bX-script/master/install.sh"
+XRAYR_INSTALL_URL="https://raw.githubusercontent.com/sakz/wyx2685-XrayR-scripts/master/install.sh"
 
 V2BX_CONFIGS=(
   # "配置名称|https://example.com/private-v2bx.zip"
