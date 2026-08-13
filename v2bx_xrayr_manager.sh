@@ -277,8 +277,17 @@ download_file() {
   local url="$1"
   local output="$2"
 
-  require_cmd wget
-  wget -q --show-progress --no-check-certificate -O "$output" "$url"
+  if command -v curl >/dev/null 2>&1; then
+    curl -fLk -o "$output" "$url"
+    return $?
+  fi
+
+  if command -v wget >/dev/null 2>&1; then
+    wget --no-check-certificate -O "$output" "$url"
+    return $?
+  fi
+
+  die "缺少下载命令: curl 或 wget"
 }
 
 install_panel_script() {
