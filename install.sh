@@ -688,7 +688,7 @@ do
             add_keys
             apt update
             install_chinese_locale_debian || continue
-            configure_dns_debian || continue
+            # configure_dns_debian || continue
             apt install vim tmux unzip zip git iptables-persistent lsof tig -y
             install_vnstat_iftop_debian
             install_fail2ban_debian || continue
