@@ -461,6 +461,9 @@ install_pfmgr(){
     echo "  pfmgr apply                  # 重新加载配置"
     echo "  pfmgr clear                  # 清空全部转发"
 }
+wait_for_menu() {
+    read -r -p "执行完成，按回车返回主菜单..." _
+}
 while :
 do
     echo "部署后端脚本："
@@ -687,14 +690,14 @@ do
             timedatectl set-timezone Asia/Shanghai
             add_keys
             apt update
-            install_chinese_locale_debian || continue
+            install_chinese_locale_debian || { wait_for_menu; continue; }
             # configure_dns_debian || continue
             apt install vim tmux unzip zip git iptables-persistent lsof tig -y
             install_vnstat_iftop_debian
-            install_fail2ban_debian || continue
+            install_fail2ban_debian || { wait_for_menu; continue; }
             install_docker_debian
             install_oh_my_zsh_debian
-            install_block_mail_debian || continue
+            install_block_mail_debian || { wait_for_menu; continue; }
             install_node_pm2
             addTmpCli
             # forwardPort
@@ -720,4 +723,5 @@ do
             break;
         ;;
     esac
+    wait_for_menu
 done
