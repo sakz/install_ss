@@ -421,15 +421,17 @@ open_bbr() {
 }
 install_node_pm2() {
     # 安装 nvm (Node 版本管理器)
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash
-    source .bashrc
+    local nvm_profile="${1:-}"
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | PROFILE="$nvm_profile" bash
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
     # 下载并安装 Node.js（可能需要重启终端）
     nvm install 24
     # 验证环境中是否存在正确的 Node.js 版本
     node -v # 应该打印 `v22.11.0`
     # 验证环境中是否存在正确的 npm 版本
     npm -v # 应该打印 `10.9.0`
-    npm i -g pm2
+    npm i -g pm2 pnpm
 }
 add_swap() {
     dd if=/dev/zero of=/swapfile bs=1M count=2048
@@ -698,7 +700,7 @@ do
             install_docker_debian
             install_oh_my_zsh_debian
             install_block_mail_debian || { wait_for_menu; continue; }
-            install_node_pm2
+            install_node_pm2 "$HOME/.zshrc"
             addTmpCli
             # forwardPort
             ulimit
