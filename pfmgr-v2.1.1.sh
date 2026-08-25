@@ -3,7 +3,7 @@ set -Eeuo pipefail
 
 # ============================================================
 # pfmgr - nftables TCP/UDP Port Forward Manager
-# Debian 12
+# Debian 11/12
 #
 # 默认:
 #   TCP + UDP
@@ -25,7 +25,7 @@ set -Eeuo pipefail
 # ============================================================
 
 APP="pfmgr"
-VERSION="2.1.0"
+VERSION="2.1.1"
 
 BASE_DIR="/etc/${APP}"
 DB="${BASE_DIR}/rules.tsv"
@@ -754,6 +754,98 @@ prepare_write() {
 
 
 # ------------------------------------------------------------
+# apt-get update 自动修复 / 跳过损坏的第三方源
+#
+# 场景: 机器上已有的第三方 apt 源（如 Docker）GPG 公钥丢失/
+#       过期，导致 `apt-get update` 报 NO_PUBKEY / 未签名，
+#       set -e 下直接中断安装。
+#
+# 策略:
+#   1) 优先抓取缺失的 GPG 公钥（gpg 或 apt-key）。
+#   2) 仍失败时，定位报错的第三方源文件，临时禁用(.disabled)。
+#   3) 只处理 /etc/apt/sources.list.d/*.list，不动主源文件。
+# ------------------------------------------------------------
+
+apt_get_update() {
+    local err_out
+    local missing_key
+    local repo_list
+    local repo_host
+    local src_file
+    local disabled_file
+
+    if apt-get update; then
+        return 0
+    fi
+
+    yellow "apt-get update 失败，尝试自动修复... (仅处理第三方源)"
+
+    err_out="$(apt-get update 2>&1 || true)"
+
+    # 1) 抓取缺失的 GPG 公钥
+    while read -r missing_key; do
+        [[ -n "${missing_key:-}" ]] || continue
+
+        yellow "检测到缺失 GPG 公钥: ${missing_key}"
+
+        if command -v gpg >/dev/null 2>&1; then
+            gpg --keyserver keyserver.ubuntu.com --recv-keys "$missing_key" \
+                >/dev/null 2>&1 \
+                && green "公钥 ${missing_key} 已补回." \
+                || yellow "公钥 ${missing_key} 抓取失败，将尝试跳过对应源。"
+        else
+            apt-key adv --keyserver keyserver.ubuntu.com --recv-keys "$missing_key" \
+                >/dev/null 2>&1 \
+                && green "公钥 ${missing_key} 已补回." \
+                || yellow "公钥 ${missing_key} 抓取失败，将尝试跳过对应源。"
+        fi
+    done <<< "$(printf '%s\n' "$err_out" \
+        | grep -oP 'NO_PUBKEY[[:space:]]+[0-9A-F]{16}' \
+        | awk '{print $2}' || true)"
+
+    if apt-get update; then
+        green "GPG 公钥修复成功，apt-get update 已恢复。"
+        return 0
+    fi
+
+    # 2) 仍失败：定位并禁用报错的第三方源文件
+    yellow "仍失败，尝试禁用报错的第三方源文件..."
+    yellow "仅处理 /etc/apt/sources.list.d/*.list，不影响主源文件。"
+
+    err_out="$(apt-get update 2>&1 || true)"
+
+    while IFS= read -r src_file; do
+        [[ -e "$src_file" ]] || continue
+
+        repo_host="$(awk '{print $2}' "$src_file" \
+            | grep -Eo '^https?://[^/ ]+' \
+            | head -n1)"
+
+        [[ -n "${repo_host:-}" ]] || continue
+
+        # 该源在这次 update 是否报错
+        if printf '%s\n' "$err_out" | grep -qF "$repo_host"; then
+            disabled_file="${src_file}.disabled.$(date +%Y%m%d-%H%M%S)"
+            if mv -n "$src_file" "$disabled_file" 2>/dev/null; then
+                yellow "已临时禁用: $src_file"
+            else
+                yellow "无法禁用（可能已被移走）: $src_file"
+            fi
+        fi
+    done <<< "$(ls /etc/apt/sources.list.d/*.list 2>/dev/null || true)"
+
+    if apt-get update; then
+        green "已跳过损坏的第三方源，apt-get update 正常。"
+        return 0
+    fi
+
+    red "apt-get update 仍然失败。"
+    red "请手动检查 /etc/apt/sources.list 和 /etc/apt/sources.list.d/ 下的配置。"
+    return 1
+}
+
+
+# ------------------------------------------------------------
 # install
 # ------------------------------------------------------------
 
@@ -763,8 +855,9 @@ cmd_install() {
     if ! command -v nft >/dev/null 2>&1 || ! command -v iptables >/dev/null 2>&1; then
         yellow "正在安装 nftables / iptables..."
 
-        apt-get update
-
+        apt_get_update || \
+            die "apt-get update 失败，请手动修复 APT 源。"
+        
         DEBIAN_FRONTEND=noninteractive \
             apt-get install -y nftables iptables
     fi

@@ -447,9 +447,9 @@ add_swap() {
 install_pfmgr(){
     # pfmgr - nftables TCP/UDP 端口转发管理器
     # 支持 DNAT + MASQUERADE，FORWARD/Docker 兼容
-    wget -N --no-check-certificate ${baseUrl}pfmgr-v2.1.0.sh
-    chmod +x pfmgr-v2.1.0.sh
-    ./pfmgr-v2.1.0.sh install
+    wget -N --no-check-certificate ${baseUrl}pfmgr-v2.1.1.sh
+    chmod +x pfmgr-v2.1.1.sh
+    ./pfmgr-v2.1.1.sh install
     echo
     echo "pfmgr 已安装到 /usr/local/sbin/pfmgr"
     echo "常用命令："
