@@ -477,11 +477,13 @@ interactive_menu() {
 
   case "$choice" in
     1)
-      url="$(choose_config_url v2bx)"
+      read -r -p "请输入 V2bX 配置 ZIP 链接: " url
+      [ -n "$url" ] || die "配置链接不能为空"
       run_install_or_update v2bx "$url"
       ;;
     2)
-      url="$(choose_config_url xrayr)"
+      read -r -p "请输入 XrayR 配置 ZIP 链接: " url
+      [ -n "$url" ] || die "配置链接不能为空"
       run_install_or_update xrayr "$url"
       ;;
     3)
