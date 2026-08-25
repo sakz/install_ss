@@ -59,6 +59,8 @@ ${C_BOLD}V2bX / XrayR 管理脚本${C_RESET}
   bash v2bx_xrayr_manager.sh update-v2bx [config_zip_url]
   bash v2bx_xrayr_manager.sh update-xrayr [config_zip_url]
   bash v2bx_xrayr_manager.sh status [v2bx|xrayr]
+  bash v2bx_xrayr_manager.sh backup-v2bx
+  bash v2bx_xrayr_manager.sh backup-xrayr
   bash v2bx_xrayr_manager.sh help
 
 环境变量:
@@ -69,6 +71,8 @@ ${C_BOLD}V2bX / XrayR 管理脚本${C_RESET}
   v2bx / xrayr             安装或更新程序，然后覆盖配置目录并重启服务
   update-v2bx/update-xrayr 只覆盖配置目录并重启服务
   status                  默认输出 V2bX 和 XrayR 两个服务状态
+  backup-v2bx/backup-xrayr 打包对应配置目录并上传到临时存储
+  backup 依赖自定义命令 tmp（上传方式），打包成 /etc/v.zip / /etc/x.zip
 EOF
 }
 
@@ -362,6 +366,37 @@ restart_service() {
   ok "服务已重启: $service"
 }
 
+backup_config() {
+  local kind="$1"
+  local dir zip_path
+
+  require_root
+  require_cmd zip
+  require_cmd tmp
+
+  case "$kind" in
+    v2bx)
+      dir="/etc/V2bX"
+      zip_path="/etc/v.zip"
+      ;;
+    xrayr)
+      dir="/etc/Xrayr"
+      zip_path="/etc/x.zip"
+      ;;
+    *) die "未知类型: $kind" ;;
+  esac
+
+  [ -d "$dir" ] || die "配置目录不存在: $dir"
+
+  info "打包 $(service_name "$kind") 配置"
+  rm -f "$zip_path"
+  ( cd /etc && zip -r "$zip_path" "$(basename "$dir")" ) || die "打包失败: ${zip_path}"
+
+  info "上传 $(service_name "$kind") 配置备份"
+  tmp "$zip_path" || die "上传失败: $zip_path"
+  ok "$(service_name "$kind") 配置已备份并上传: $zip_path"
+}
+
 run_install_or_update() {
   local kind="$1"
   local config_url="$2"
@@ -434,6 +469,8 @@ interactive_menu() {
   printf "  3) 只更新 V2bX 配置\n"
   printf "  4) 只更新 XrayR 配置\n"
   printf "  5) 查看服务状态\n"
+  printf "  6) 备份并上传 V2bX 配置\n"
+  printf "  7) 备份并上传 XrayR 配置\n"
   printf "\n"
 
   read -r -p "请输入选项: " choice
@@ -457,6 +494,12 @@ interactive_menu() {
       ;;
     5)
       show_status all
+      ;;
+    6)
+      backup_config v2bx
+      ;;
+    7)
+      backup_config xrayr
       ;;
     *)
       die "无效选项: $choice"
@@ -489,6 +532,12 @@ main() {
       ;;
     status)
       show_status "${2:-all}"
+      ;;
+    backup-v2bx)
+      backup_config v2bx
+      ;;
+    backup-xrayr)
+      backup_config xrayr
       ;;
     *)
       usage
