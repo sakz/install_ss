@@ -380,7 +380,7 @@ backup_config() {
       zip_path="/etc/v.zip"
       ;;
     xrayr)
-      dir="/etc/Xrayr"
+      dir="/etc/XrayR"
       zip_path="/etc/x.zip"
       ;;
     *) die "未知类型: $kind" ;;
