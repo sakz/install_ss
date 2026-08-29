@@ -193,7 +193,7 @@ install_node_centos(){
     # pm2 start shadowsocks/server.py > /dev/null 2>&1
 }
 install_redis(){
-    wget --no-check-certificate ${baseUrl}install-redis.sh && bash install-redis.sh
+    wget --no-check-certificate ${baseUrl}install_redis_debian12_13_v3.sh && bash install_redis_debian12_13_v3.sh
 }
 install_iftop_centos7(){
     yum install -y libpcap libpcap-devel ncurses ncurses-devel
@@ -493,7 +493,7 @@ do
     echo '20: 安装bbr'
     echo '21: 安装axel'
     echo '22: 安装node和pm2'
-    echo '23: 安装redis'
+    echo '23: 安装redis (仅支持debian12/13)'
     echo '24: 安装iftop-centos7'
     echo '25: 添加keys'
     echo '26: 安装docker和docker-compose'
