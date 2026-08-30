@@ -97,17 +97,6 @@
         "settings": {
             "rules": [
                 {
-                    "type":"field",
-                    "domain":[
-                        "domain:openai.com",
-                        "domain:ai.com",
-                        "domain:chatgpt.com",
-                        "domain:claude.ai",
-                        "domain:ipinfo.io"
-                    ],
-                    "outboundTag":"chatgpt"
-                },
-                {
                     "type": "field",
                     "outboundTag": "block",
                     "domain":[
