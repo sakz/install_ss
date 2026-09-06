@@ -294,6 +294,13 @@ download_file() {
   die "缺少下载命令: curl 或 wget"
 }
 
+patch_install_script() {
+  local script_path="$1"
+
+  # 去掉上游脚本里 wget 的静默参数，让下载进度条可见
+  sed -i "s/wget -q -N/wget -N/g" "$script_path"
+}
+
 install_panel_script() {
   local kind="$1"
   local url script_path
@@ -304,7 +311,9 @@ install_panel_script() {
   info "下载 $(service_name "$kind") 安装脚本"
   download_file "$url" "$script_path"
 
-  info "运行 $(service_name "$kind") 安装脚本"
+  patch_install_script "$script_path"
+
+  info "运行 $(service_name "$kind") 安装脚本（需从 GitHub 下载程序包，网络慢时可能需要几分钟，请留意下方进度条）"
   bash "$script_path"
 }
 
