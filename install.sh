@@ -431,7 +431,7 @@ install_node_pm2() {
     node -v # 应该打印 `v22.11.0`
     # 验证环境中是否存在正确的 npm 版本
     npm -v # 应该打印 `10.9.0`
-    npm i -g pm2 pnpm
+    npm i -g pm2 pnpm yarn
 }
 add_swap() {
     dd if=/dev/zero of=/swapfile bs=1M count=2048
@@ -699,13 +699,16 @@ do
             install_fail2ban_debian || { wait_for_menu; continue; }
             install_docker_debian
             install_oh_my_zsh_debian
-            install_block_mail_debian || { wait_for_menu; continue; }
             install_node_pm2 "$HOME/.zshrc"
             addTmpCli
             # forwardPort
             ulimit
             open_bbr
             add_swap
+            read -p "是否安装封禁邮件功能？(y/N)：" block_mail_choice
+            if [[ "$block_mail_choice" =~ ^[Yy]$ ]]; then
+                install_block_mail_debian || { wait_for_menu; continue; }
+            fi
             echo "初始化完毕！"
         ;;
         41)
