@@ -463,6 +463,40 @@ install_pfmgr(){
     echo "  pfmgr apply                  # 重新加载配置"
     echo "  pfmgr clear                  # 清空全部转发"
 }
+dir_size_rank() {
+    # 按目录直属文件（不含子目录）的磁盘占用排行
+    local target top_n
+    read -p "输入扫描目录（默认 /）：" target
+    [ -z "$target" ] && target="/"
+    if [ ! -d "$target" ]; then
+        echo "目录不存在：$target"
+        return 1
+    fi
+    read -p "显示前多少名（默认 20）：" top_n
+    [[ "$top_n" =~ ^[0-9]+$ ]] || top_n=20
+
+    df -h "$target"
+    echo
+    echo "正在扫描统计，文件较多时可能需要一些时间..."
+    echo
+    find "$target" \
+        \( -path /proc -o -path /sys -o -path /dev -o -path /run -o -path /snap \) -prune -o \
+        -type f -printf '%b\t%h\n' 2>/dev/null |
+    awk -F'\t' '{size[$2]+=$1*512; count[$2]++} END {for (d in size) print size[d] "\t" count[d] "\t" d}' |
+    sort -rn |
+    head -n "$top_n" |
+    awk -F'\t' '{
+        s=$1; c=$2
+        sub(/^[^\t]*\t[^\t]*\t/, "")
+        u="B"; v=s
+        if (s>=1073741824) {v=s/1073741824; u="GB"}
+        else if (s>=1048576) {v=s/1048576; u="MB"}
+        else if (s>=1024) {v=s/1024; u="KB"}
+        printf "%10.2f %-2s %7d 个文件  %s\n", v, u, c, $0
+    }'
+    echo
+    echo "说明：以上为各目录直属文件的磁盘占用总和排行，不含子目录占用"
+}
 wait_for_menu() {
     read -r -p "执行完成，按回车返回主菜单..." _
 }
@@ -514,6 +548,7 @@ do
     echo '42: 一键开启ubuntu和debian的bbr'
     echo '43: 安装Ookla官方speedtest'
     echo '44: 安装pfmgr端口转发管理器'
+    echo '45: 磁盘占用目录排行（按直属文件大小）'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
     case $choice in
@@ -722,6 +757,9 @@ do
         ;;
         44)
             install_pfmgr
+        ;;
+        45)
+            dir_size_rank
         ;;
         *)
             echo '退出脚本！'
