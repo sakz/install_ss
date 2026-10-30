@@ -447,14 +447,15 @@ add_swap() {
 install_pfmgr(){
     # pfmgr - nftables TCP/UDP 端口转发管理器
     # 支持 DNAT + MASQUERADE，FORWARD/Docker 兼容
-    wget -N --no-check-certificate ${baseUrl}pfmgr-v2.1.1.sh
-    chmod +x pfmgr-v2.1.1.sh
-    ./pfmgr-v2.1.1.sh install
+    wget -N --no-check-certificate ${baseUrl}pfmgr-v2.2.0.sh
+    chmod +x pfmgr-v2.2.0.sh
+    ./pfmgr-v2.2.0.sh install
     echo
     echo "pfmgr 已安装到 /usr/local/sbin/pfmgr"
     echo "常用命令："
     echo "  pfmgr add 443 1.2.3.4        # 添加端口转发（TCP+UDP）"
     echo "  pfmgr add 8443 1.2.3.4 443   # 自定义目标端口"
+    echo "  pfmgr add 8090 local 8080    # 本机 8090 转发到 8080（TCP+UDP）"
     echo "  pfmgr list                   # 查看所有规则"
     echo "  pfmgr stats                  # 查看每个端口双向流量"
     echo "  pfmgr update 443 5.6.7.8     # 修改目标地址"
