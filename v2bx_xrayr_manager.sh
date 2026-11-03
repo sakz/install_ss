@@ -69,6 +69,8 @@ ${C_BOLD}V2bX / XrayR 管理脚本${C_RESET}
 
 说明:
   v2bx / xrayr             安装或更新程序，然后覆盖配置目录并重启服务
+                           交互菜单安装时会提示输入版本号，留空则安装最新版
+                           版本号可带 v 或不带 v，不带时会自动补 v
   update-v2bx/update-xrayr 只覆盖配置目录并重启服务
   status                  默认输出 V2bX 和 XrayR 两个服务状态
   backup-v2bx/backup-xrayr 打包对应配置目录并上传到临时存储
@@ -132,6 +134,28 @@ default_config_url() {
 
 print_title() {
   printf "\n${C_BOLD}${C_BLUE}%s${C_RESET}\n" "$1"
+}
+
+normalize_version() {
+  local version="$1"
+
+  if [ -z "$version" ]; then
+    return
+  fi
+
+  case "$version" in
+    v*|V*) printf "v%s" "${version:1}" ;;
+    *) printf "v%s" "$version" ;;
+  esac
+}
+
+prompt_version() {
+  local kind="$1"
+  local version
+
+  printf "请输入 %s 版本号（留空安装最新版，可带 v 或不带 v）: " "$(service_name "$kind")" >&2
+  read -r version
+  normalize_version "$version"
 }
 
 config_count() {
@@ -303,6 +327,7 @@ patch_install_script() {
 
 install_panel_script() {
   local kind="$1"
+  local version="${2:-}"
   local url script_path
 
   url="$(install_url "$kind")"
@@ -313,8 +338,13 @@ install_panel_script() {
 
   patch_install_script "$script_path"
 
-  info "运行 $(service_name "$kind") 安装脚本（需从 GitHub 下载程序包，网络慢时可能需要几分钟，请留意下方进度条）"
-  bash "$script_path"
+  if [ -n "$version" ]; then
+    info "运行 $(service_name "$kind") 安装脚本，安装指定版本 ${version}（需从 GitHub 下载程序包，网络慢时可能需要几分钟，请留意下方进度条）"
+    bash "$script_path" "$version"
+  else
+    info "运行 $(service_name "$kind") 安装脚本，安装最新版（需从 GitHub 下载程序包，网络慢时可能需要几分钟，请留意下方进度条）"
+    bash "$script_path"
+  fi
 }
 
 apply_config() {
@@ -409,9 +439,10 @@ backup_config() {
 run_install_or_update() {
   local kind="$1"
   local config_url="$2"
+  local version="${3:-}"
 
   require_root
-  install_panel_script "$kind"
+  install_panel_script "$kind" "$version"
   apply_config "$kind" "$config_url"
   restart_service "$kind"
   show_status "$kind"
@@ -470,7 +501,7 @@ show_status() {
 }
 
 interactive_menu() {
-  local choice url
+  local choice url version
 
   print_title "V2bX / XrayR 管理脚本"
   printf "  1) 安装/更新 V2bX\n"
@@ -488,12 +519,14 @@ interactive_menu() {
     1)
       read -r -p "请输入 V2bX 配置 ZIP 链接: " url
       [ -n "$url" ] || die "配置链接不能为空"
-      run_install_or_update v2bx "$url"
+      version="$(prompt_version v2bx)"
+      run_install_or_update v2bx "$url" "$version"
       ;;
     2)
       read -r -p "请输入 XrayR 配置 ZIP 链接: " url
       [ -n "$url" ] || die "配置链接不能为空"
-      run_install_or_update xrayr "$url"
+      version="$(prompt_version xrayr)"
+      run_install_or_update xrayr "$url" "$version"
       ;;
     3)
       url="$(choose_config_url v2bx)"

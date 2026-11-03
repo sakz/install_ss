@@ -1,0 +1,79 @@
+{
+  "domainStrategy": "IPOnDemand",
+  "rules": [
+    {
+      "type": "field",
+      "ip": [
+        "geoip:private"
+      ],
+      "outboundTag": "block"
+    },
+    {
+      "type": "field",
+      "protocol": [
+        "bittorrent"
+      ],
+      "outboundTag": "block"
+    },
+    {
+      "type": "field",
+      "domain": [
+        "domain:openai.com",
+        "domain:ai.com",
+        "domain:chatgpt.com",
+        "domain:ip.pn",
+        "domain:oaistatic.com",
+        "domain:oaiusercontent.com",
+        "domain:oaistatsig.com",
+        "domain:openaimerge.com"
+      ],
+      "outboundTag": "IPv4_out"
+    },
+    {
+      "type": "field",
+      "domain": [
+        "domain:gemini.google.com",
+        "domain:aistudio.google.com",
+        "domain:ip.me"
+      ],
+      "outboundTag": "IPv4_out"
+    },
+    {
+      "type": "field",
+      "domain": [
+        "domain:gstatic.com",
+        "domain:googleapis.com",
+        "domain:googleusercontent.com",
+        "domain:ggpht.com",
+        "domain:scf.usercontent.goog"
+      ],
+      "outboundTag": "IPv4_out"
+    },
+    {
+      "type": "field",
+      "domain": [
+        "geosite:netflix"
+      ],
+      "outboundTag": "IPv6_out"
+    },
+    {
+      "type": "field",
+      "domain": [
+        "geosite:cn"
+      ],
+      "outboundTag": "block"
+    },
+    {
+      "type": "field",
+      "ip": [
+        "geoip:cn"
+      ],
+      "outboundTag": "block"
+    },
+    {
+      "type": "field",
+      "network": "tcp,udp",
+      "outboundTag": "IPv4_out"
+    }
+  ]
+}
