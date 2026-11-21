@@ -225,44 +225,96 @@ install_docker(){
     systemctl enable docker
 }
 install_docker_debian(){
-    local docker_dist
+    local os_id os_codename repo_url tmp_key candidate
     . /etc/os-release
-    case "$ID" in
+    os_id="$ID"
+    os_codename="$VERSION_CODENAME"
+    case "$os_id" in
         debian|ubuntu)
-            docker_dist="$ID"
         ;;
         *)
-            echo "不支持的系统：$ID"
+            echo "不支持的系统：${os_id:-unknown}"
             return 1
         ;;
     esac
+    if [ -z "$os_codename" ]; then
+        echo "无法从 /etc/os-release 获取 VERSION_CODENAME"
+        return 1
+    fi
+
+    # 清掉旧 Docker 源，避免坏源阻断下面的 apt update
+    rm -f /etc/apt/sources.list.d/docker.list \
+          /etc/apt/sources.list.d/docker-ce.list \
+          /etc/apt/sources.list.d/docker.sources \
+          /etc/apt/keyrings/docker.gpg
 
     # 1. 安装基础依赖
-    apt update && apt install ca-certificates curl gnupg lsb-release -y
-    
-    # 2. 设置 Docker 官方密钥环 (采用更现代的权限管理)
+    apt update && apt install -y ca-certificates curl gnupg || {
+        echo "基础依赖安装失败"
+        return 1
+    }
+
+    # 2. 选择可用镜像并下载校验 GPG key：腾讯云内网 -> 腾讯云公网 -> Docker 官方
     mkdir -m 0755 -p /etc/apt/keyrings
-    # 如果文件已存在则静默覆盖
-    curl -fsSL "https://download.docker.com/linux/${docker_dist}/gpg" | gpg --dearmor --yes -o /etc/apt/keyrings/docker.gpg
-    
-    # 3. 添加官方源
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/${docker_dist} $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
-    
+    tmp_key=$(mktemp)
+    repo_url=""
+    for candidate in \
+        "https://mirrors.tencentyun.com/docker-ce/linux/${os_id}" \
+        "https://mirrors.cloud.tencent.com/docker-ce/linux/${os_id}" \
+        "https://download.docker.com/linux/${os_id}"; do
+        if curl -fsS --connect-timeout 5 --max-time 10 -o /dev/null "${candidate}/dists/${os_codename}/InRelease" 2>/dev/null \
+           && : > "$tmp_key" \
+           && curl -fsSL --connect-timeout 5 --max-time 20 "${candidate}/gpg" -o "$tmp_key" 2>/dev/null \
+           && [ -s "$tmp_key" ] \
+           && gpg --show-keys "$tmp_key" >/dev/null 2>&1; then
+            repo_url="$candidate"
+            break
+        fi
+    done
+    if [ -z "$repo_url" ]; then
+        rm -f "$tmp_key"
+        echo "找不到可用的 Docker 软件源或 GPG key"
+        return 1
+    fi
+    echo "使用 Docker 源：${repo_url}"
+    if ! install -m 0644 "$tmp_key" /etc/apt/keyrings/docker.asc; then
+        rm -f "$tmp_key"
+        echo "Docker GPG key 安装失败"
+        return 1
+    fi
+    rm -f "$tmp_key"
+
+    # 3. 只写入一条 Docker 源
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] ${repo_url} ${os_codename} stable" > /etc/apt/sources.list.d/docker.list
+
     # 4. 安装 Docker 核心组件及 V2 版 Compose 插件
-    apt update 
-    apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
-    
-    # 5. 启动服务
-    systemctl start docker
-    systemctl enable docker
-    
-    # 6. 【核心优化】创建软链接
-    # 这样你输入 docker-compose 时，实际上运行的是 docker compose (V2)
-    # 完美解决 Invalid interpolation 报错问题
-    ln -sf /usr/libexec/docker/cli-plugins/docker-compose /usr/local/bin/docker-compose
-    
+    apt update || {
+        echo "apt update 失败"
+        return 1
+    }
+    apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin || {
+        echo "Docker 软件包安装失败"
+        return 1
+    }
+
+    # 5. 启动服务并验证
+    systemctl enable --now docker || {
+        echo "Docker 服务启动失败"
+        return 1
+    }
+    if ! docker info >/dev/null 2>&1; then
+        echo "Docker daemon 未正常运行"
+        systemctl status docker --no-pager || true
+        return 1
+    fi
+    docker compose version || return 1
+
+    # 6. 兼容旧的 docker-compose 命令
+    if [ -x /usr/libexec/docker/cli-plugins/docker-compose ]; then
+        ln -sf /usr/libexec/docker/cli-plugins/docker-compose /usr/local/bin/docker-compose
+    fi
+
     echo "Docker 及 Docker Compose V2 安装完成！"
-    docker compose version
 }
 install_v2ray_tls_v2(){
     wget ${baseUrl}v2ray_ws_tls1.3_ver2.sh
@@ -733,7 +785,7 @@ do
             apt install vim tmux unzip zip git iptables-persistent lsof tig -y
             install_vnstat_iftop_debian
             install_fail2ban_debian || { wait_for_menu; continue; }
-            install_docker_debian
+            install_docker_debian || { wait_for_menu; continue; }
             install_oh_my_zsh_debian
             install_node_pm2 "$HOME/.zshrc"
             addTmpCli
