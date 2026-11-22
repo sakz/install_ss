@@ -448,19 +448,60 @@ install_speedtest_ookla() {
     fi
 }
 install_oh_my_zsh_debian() {
-    apt install -y zsh
-    local zsh_path
+    local -a failed_steps=()
+    local zsh_path zsh_plugin_dir tmp_omz
+    apt install -y zsh || failed_steps+=("安装 zsh")
     zsh_path="$(command -v zsh)"
-    if [ "$(getent passwd "$(id -un)" | cut -d: -f7)" != "$zsh_path" ]; then
-        chsh -s "$zsh_path"
+    if [ -n "$zsh_path" ] && [ "$(getent passwd "$(id -un)" | cut -d: -f7)" != "$zsh_path" ]; then
+        chsh -s "$zsh_path" || failed_steps+=("设置默认 shell 为 zsh")
     fi
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-    sed -i 's/^ZSH_THEME=.*/ZSH_THEME="risto"/' ~/.zshrc
-    # 禁用 oh my zsh 自动更新提示
-    sed -i '/^source \$ZSH\/oh-my-zsh.sh/i DISABLE_AUTO_UPDATE="true"' ~/.zshrc
-    # 安装 zsh-autosuggestions 插件
-    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-    sed -i 's/^plugins=(/plugins=(zsh-autosuggestions /' ~/.zshrc
+    # oh-my-zsh 官方安装器在 $ZSH 目录已存在时会直接退出，这里用临时克隆合并，兼容残缺目录
+    if [ ! -f "$HOME/.oh-my-zsh/oh-my-zsh.sh" ]; then
+        tmp_omz="$(mktemp -d)"
+        if git clone --depth=1 https://github.com/ohmyzsh/ohmyzsh.git "$tmp_omz"; then
+            { mkdir -p "$HOME/.oh-my-zsh" && cp -a "$tmp_omz/." "$HOME/.oh-my-zsh/"; } \
+                || failed_steps+=("补全 oh-my-zsh")
+        else
+            failed_steps+=("下载 oh-my-zsh")
+        fi
+        rm -rf "$tmp_omz"
+    fi
+    if [ ! -f "$HOME/.zshrc" ]; then
+        if [ -f "$HOME/.oh-my-zsh/templates/zshrc.zsh-template" ]; then
+            cp "$HOME/.oh-my-zsh/templates/zshrc.zsh-template" "$HOME/.zshrc" \
+                || failed_steps+=("生成 .zshrc")
+        else
+            failed_steps+=("生成 .zshrc（模板缺失）")
+        fi
+    fi
+    if [ -f "$HOME/.zshrc" ]; then
+        sed -i 's/^ZSH_THEME=.*/ZSH_THEME="risto"/' "$HOME/.zshrc"
+        grep -q '^ZSH_THEME="risto"' "$HOME/.zshrc" || failed_steps+=("设置主题 risto")
+        # 禁用 oh my zsh 自动更新提示
+        if ! grep -q '^DISABLE_AUTO_UPDATE=' "$HOME/.zshrc"; then
+            sed -i '/^source \$ZSH\/oh-my-zsh.sh/i DISABLE_AUTO_UPDATE="true"' "$HOME/.zshrc"
+        fi
+        grep -q '^DISABLE_AUTO_UPDATE=' "$HOME/.zshrc" || failed_steps+=("禁用自动更新")
+        # 安装 zsh-autosuggestions 插件
+        zsh_plugin_dir="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
+        if [ ! -d "$zsh_plugin_dir" ]; then
+            git clone https://github.com/zsh-users/zsh-autosuggestions "$zsh_plugin_dir" \
+                || failed_steps+=("下载 zsh-autosuggestions")
+        fi
+        if ! grep -q '^plugins=(.*zsh-autosuggestions' "$HOME/.zshrc"; then
+            sed -i 's/^plugins=(/plugins=(zsh-autosuggestions /' "$HOME/.zshrc"
+        fi
+        grep -q '^plugins=(.*zsh-autosuggestions' "$HOME/.zshrc" || failed_steps+=("启用 zsh-autosuggestions 插件")
+        grep -q 'oh-my-zsh.sh' "$HOME/.zshrc" || failed_steps+=("加载 oh-my-zsh")
+    fi
+    if [ ${#failed_steps[@]} -gt 0 ]; then
+        local failed_text="" failed_step
+        for failed_step in "${failed_steps[@]}"; do
+            failed_text="${failed_text}${failed_text:+、}${failed_step}"
+        done
+        echo "oh-my-zsh 安装未完成，失败步骤：${failed_text}"
+        return 1
+    fi
     echo "oh my zsh 安装完成，已设为默认 shell（重新登录后生效），默认主题已修改为 risto，已禁用自动更新，已安装 zsh-autosuggestions 插件"
 }
 open_bbr() {
@@ -472,18 +513,38 @@ open_bbr() {
     echo "BBR启动成功！"
 }
 install_node_pm2() {
-    # 安装 nvm (Node 版本管理器)
+    local -a failed_steps=()
     local nvm_profile="${1:-}"
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | PROFILE="$nvm_profile" bash
+    # 安装 nvm (Node 版本管理器)
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | PROFILE="$nvm_profile" bash \
+        || failed_steps+=("执行 nvm 安装脚本")
     export NVM_DIR="$HOME/.nvm"
     [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-    # 下载并安装 Node.js（可能需要重启终端）
-    nvm install 24
-    # 验证环境中是否存在正确的 Node.js 版本
-    node -v # 应该打印 `v22.11.0`
-    # 验证环境中是否存在正确的 npm 版本
-    npm -v # 应该打印 `10.9.0`
-    npm i -g pm2 pnpm yarn
+    if [ ! -s "$NVM_DIR/nvm.sh" ]; then
+        failed_steps+=("安装 nvm")
+    else
+        nvm install 24 || failed_steps+=("安装 Node.js 24")
+    fi
+    if ! command -v node >/dev/null 2>&1; then
+        failed_steps+=("Node.js 不可用")
+    fi
+    if ! command -v npm >/dev/null 2>&1; then
+        failed_steps+=("npm 不可用")
+    elif ! npm i -g pm2 pnpm yarn; then
+        failed_steps+=("全局安装 pm2/pnpm/yarn")
+    fi
+    if [ -n "$nvm_profile" ] && ! grep -q '/nvm.sh' "$nvm_profile" 2>/dev/null; then
+        failed_steps+=("将 nvm 加载配置写入 $nvm_profile")
+    fi
+    if [ ${#failed_steps[@]} -gt 0 ]; then
+        local failed_text="" failed_step
+        for failed_step in "${failed_steps[@]}"; do
+            failed_text="${failed_text}${failed_text:+、}${failed_step}"
+        done
+        echo "Node/pm2 安装未完成，失败步骤：${failed_text}"
+        return 1
+    fi
+    echo "Node $(node -v)、npm $(npm -v)、pm2/pnpm/yarn 安装完成"
 }
 add_swap() {
     dd if=/dev/zero of=/swapfile bs=1M count=2048
@@ -786,8 +847,8 @@ do
             install_vnstat_iftop_debian
             install_fail2ban_debian || { wait_for_menu; continue; }
             install_docker_debian || { wait_for_menu; continue; }
-            install_oh_my_zsh_debian
-            install_node_pm2 "$HOME/.zshrc"
+            install_oh_my_zsh_debian || { wait_for_menu; continue; }
+            install_node_pm2 "$HOME/.zshrc" || { wait_for_menu; continue; }
             addTmpCli
             # forwardPort
             ulimit
