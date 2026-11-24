@@ -447,14 +447,69 @@ install_speedtest_ookla() {
         echo "不支持的操作系统"
     fi
 }
+set_zsh_default_shell() {
+    local target_user zsh_path current_shell set_ok=0
+    target_user="$(id -un)"
+    zsh_path="$(command -v zsh)"
+    if [ -z "$zsh_path" ]; then
+        echo "zsh 未安装或不在 PATH"
+        return 1
+    fi
+    if ! grep -qxF "$zsh_path" /etc/shells 2>/dev/null; then
+        printf '%s\n' "$zsh_path" >> /etc/shells || {
+            echo "写入 /etc/shells 失败"
+            return 1
+        }
+    fi
+    current_shell="$(getent passwd "$target_user" | cut -d: -f7)"
+    if [ "$current_shell" = "$zsh_path" ]; then
+        echo "$target_user 的默认 shell 已是 $zsh_path"
+        return 0
+    fi
+    if command -v usermod >/dev/null 2>&1 && usermod -s "$zsh_path" "$target_user"; then
+        set_ok=1
+    elif command -v chsh >/dev/null 2>&1 && chsh -s "$zsh_path" "$target_user"; then
+        set_ok=1
+    fi
+    if [ "$set_ok" -ne 1 ]; then
+        echo "设置默认 shell 失败（usermod/chsh 均不可用或执行失败）"
+        return 1
+    fi
+    current_shell="$(getent passwd "$target_user" | cut -d: -f7)"
+    if [ "$current_shell" != "$zsh_path" ]; then
+        echo "默认 shell 校验失败：$target_user 当前为 ${current_shell:-未知}"
+        return 1
+    fi
+    echo "已将 $target_user 的默认 shell 设为 $zsh_path（重新登录后生效；当前会话可执行 exec zsh）"
+}
+install_zsh_default_shell() {
+    if ! command -v zsh >/dev/null 2>&1; then
+        if command -v apt-get >/dev/null 2>&1; then
+            apt-get install -y zsh || { apt-get update && apt-get install -y zsh; } || {
+                echo "zsh 安装失败"
+                return 1
+            }
+        elif command -v dnf >/dev/null 2>&1; then
+            dnf install -y zsh || {
+                echo "zsh 安装失败"
+                return 1
+            }
+        elif command -v yum >/dev/null 2>&1; then
+            yum install -y zsh || {
+                echo "zsh 安装失败"
+                return 1
+            }
+        else
+            echo "不支持的包管理器，请手动安装 zsh"
+            return 1
+        fi
+    fi
+    set_zsh_default_shell
+}
 install_oh_my_zsh_debian() {
     local -a failed_steps=()
-    local zsh_path zsh_plugin_dir tmp_omz
-    apt install -y zsh || failed_steps+=("安装 zsh")
-    zsh_path="$(command -v zsh)"
-    if [ -n "$zsh_path" ] && [ "$(getent passwd "$(id -un)" | cut -d: -f7)" != "$zsh_path" ]; then
-        chsh -s "$zsh_path" || failed_steps+=("设置默认 shell 为 zsh")
-    fi
+    local zsh_plugin_dir tmp_omz
+    install_zsh_default_shell || failed_steps+=("安装 zsh 并设置默认 shell")
     # oh-my-zsh 官方安装器在 $ZSH 目录已存在时会直接退出，这里用临时克隆合并，兼容残缺目录
     if [ ! -f "$HOME/.oh-my-zsh/oh-my-zsh.sh" ]; then
         tmp_omz="$(mktemp -d)"
@@ -663,6 +718,7 @@ do
     echo '43: 安装Ookla官方speedtest'
     echo '44: 安装pfmgr端口转发管理器'
     echo '45: 磁盘占用目录排行（按直属文件大小）'
+    echo '46: 安装zsh并设为默认shell'
     echo 'q: 退出安装脚本'
     read -p "输入你的选择：" choice
     case $choice in
@@ -874,6 +930,9 @@ do
         ;;
         45)
             dir_size_rank
+        ;;
+        46)
+            install_zsh_default_shell || { wait_for_menu; continue; }
         ;;
         *)
             echo '退出脚本！'
