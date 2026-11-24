@@ -254,14 +254,14 @@ install_docker_debian(){
         return 1
     }
 
-    # 2. 选择可用镜像并下载校验 GPG key：腾讯云内网 -> 腾讯云公网 -> Docker 官方
+    # 2. 选择可用镜像并下载校验 GPG key：Docker 官方 -> 腾讯云内网 -> 腾讯云公网
     mkdir -m 0755 -p /etc/apt/keyrings
     tmp_key=$(mktemp)
     repo_url=""
     for candidate in \
+        "https://download.docker.com/linux/${os_id}" \
         "https://mirrors.tencentyun.com/docker-ce/linux/${os_id}" \
-        "https://mirrors.cloud.tencent.com/docker-ce/linux/${os_id}" \
-        "https://download.docker.com/linux/${os_id}"; do
+        "https://mirrors.cloud.tencent.com/docker-ce/linux/${os_id}"; do
         if curl -fsS --connect-timeout 5 --max-time 10 -o /dev/null "${candidate}/dists/${os_codename}/InRelease" 2>/dev/null \
            && : > "$tmp_key" \
            && curl -fsSL --connect-timeout 5 --max-time 20 "${candidate}/gpg" -o "$tmp_key" 2>/dev/null \

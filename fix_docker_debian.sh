@@ -42,10 +42,11 @@ install -d -m 0755 /etc/apt/keyrings
 tmp_key=$(mktemp)
 trap 'rm -f "$tmp_key"' EXIT
 repo_url=""
+# 优先官方源，官方不可达时再回退腾讯云镜像
 for candidate in \
+    "https://download.docker.com/linux/${os_id}" \
     "https://mirrors.tencentyun.com/docker-ce/linux/${os_id}" \
-    "https://mirrors.cloud.tencent.com/docker-ce/linux/${os_id}" \
-    "https://download.docker.com/linux/${os_id}"; do
+    "https://mirrors.cloud.tencent.com/docker-ce/linux/${os_id}"; do
     if curl -fsS --connect-timeout 5 --max-time 10 -o /dev/null "${candidate}/dists/${os_codename}/InRelease" 2>/dev/null \
        && : > "$tmp_key" \
        && curl -fsSL --connect-timeout 5 --max-time 30 "${candidate}/gpg" -o "$tmp_key" 2>/dev/null \
